@@ -64,9 +64,29 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	// Now we can attach the router to the 'root' element like this:
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	// Notice that we've organized all of our routes into a separate file.
+	
+	
+	var ZeroReact = function (_ZeroFrame) {
+	  _inherits(ZeroReact, _ZeroFrame);
+	
+	  function ZeroReact() {
+	    _classCallCheck(this, ZeroReact);
+	
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(ZeroReact).apply(this, arguments));
+	  }
+	
+	  return ZeroReact;
+	}(_zeroframe2.default);
+	
+	// Now we can attach the router to the 'root' element like this:
+	
 	_reactDom2.default.render(_router2.default, document.getElementById('root'));
 
 /***/ },
@@ -25104,80 +25124,23 @@
 
 	"use strict";
 	
-	var Class,
-	    slice = [].slice;
-	
-	Class = function () {
-	  function Class() {}
-	
-	  Class.prototype.trace = true;
-	
-	  Class.prototype.log = function () {
-	    var args;
-	    args = 1 <= arguments.length ? slice.call(arguments, 0) : [];
-	    if (!this.trace) {
-	      return;
-	    }
-	    if (typeof console === 'undefined') {
-	      return;
-	    }
-	    args.unshift("[" + this.constructor.name + "]");
-	    console.log.apply(console, args);
-	    return this;
-	  };
-	
-	  Class.prototype.logStart = function () {
-	    var args, name;
-	    name = arguments[0], args = 2 <= arguments.length ? slice.call(arguments, 1) : [];
-	    if (!this.trace) {
-	      return;
-	    }
-	    this.logtimers || (this.logtimers = {});
-	    this.logtimers[name] = +new Date();
-	    if (args.length > 0) {
-	      this.log.apply(this, ["" + name].concat(slice.call(args), ["(started)"]));
-	    }
-	    return this;
-	  };
-	
-	  Class.prototype.logEnd = function () {
-	    var args, ms, name;
-	    name = arguments[0], args = 2 <= arguments.length ? slice.call(arguments, 1) : [];
-	    ms = +new Date() - this.logtimers[name];
-	    this.log.apply(this, ["" + name].concat(slice.call(args), ["(Done in " + ms + "ms)"]));
-	    return this;
-	  };
-	
-	  return Class;
-	}();
-	
-	window.Class = Class;
-	
 	var ZeroFrame,
 	    bind = function bind(fn, me) {
 	  return function () {
 	    return fn.apply(me, arguments);
 	  };
 	},
-	    extend = function extend(child, parent) {
-	  for (var key in parent) {
-	    if (hasProp.call(parent, key)) child[key] = parent[key];
-	  }function ctor() {
-	    this.constructor = child;
-	  }ctor.prototype = parent.prototype;child.prototype = new ctor();child.__super__ = parent.prototype;return child;
-	},
-	    hasProp = {}.hasOwnProperty;
+	    slice = [].slice;
 	
-	ZeroFrame = function (superClass) {
-	  extend(ZeroFrame, superClass);
-	
+	ZeroFrame = function () {
 	  function ZeroFrame(url) {
 	    this.onCloseWebsocket = bind(this.onCloseWebsocket, this);
 	    this.onOpenWebsocket = bind(this.onOpenWebsocket, this);
-	    this.onRequest = bind(this.onRequest, this);
+	    this.route = bind(this.route, this);
 	    this.onMessage = bind(this.onMessage, this);
 	    this.url = url;
 	    this.waiting_cb = {};
+	    this.wrapper_nonce = document.location.href.replace(/.*wrapper_nonce=([A-Za-z0-9]+).*/, "$1");
 	    this.connect();
 	    this.next_message_id = 1;
 	    this.init();
@@ -25212,12 +25175,12 @@
 	    } else if (cmd === "wrapperClosedWebsocket") {
 	      return this.onCloseWebsocket();
 	    } else {
-	      return this.onRequest(cmd, message.params);
+	      return this.route(cmd, message);
 	    }
 	  };
 	
-	  ZeroFrame.prototype.onRequest = function (cmd, message) {
-	    return this.log("Unknown request", message);
+	  ZeroFrame.prototype.route = function (cmd, message) {
+	    return this.log("Unknown command", message);
 	  };
 	
 	  ZeroFrame.prototype.response = function (to, result) {
@@ -25245,12 +25208,19 @@
 	    if (cb == null) {
 	      cb = null;
 	    }
+	    message.wrapper_nonce = this.wrapper_nonce;
 	    message.id = this.next_message_id;
 	    this.next_message_id += 1;
 	    this.target.postMessage(message, "*");
 	    if (cb) {
 	      return this.waiting_cb[message.id] = cb;
 	    }
+	  };
+	
+	  ZeroFrame.prototype.log = function () {
+	    var args;
+	    args = 1 <= arguments.length ? slice.call(arguments, 0) : [];
+	    return console.log.apply(console, ["[ZeroFrame]"].concat(slice.call(args)));
 	  };
 	
 	  ZeroFrame.prototype.onOpenWebsocket = function () {
@@ -25262,9 +25232,9 @@
 	  };
 	
 	  return ZeroFrame;
-	}(Class);
+	}();
 	
-	window.ZeroFrame = new ZeroFrame();
+	window.ZeroFrame = ZeroFrame;
 
 /***/ }
 /******/ ]);
