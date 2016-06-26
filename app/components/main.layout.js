@@ -22,7 +22,7 @@ const MainLayout = React.createClass({
                 <Link to="about-me" className="nav-link">About me</Link>
               </li>
               <li className="nav-item">
-                <Link to="comments" className="nav-link">Leave a comment</Link>
+                <Link to="messages" className="nav-link">Leave a message</Link>
               </li>
             </ul>
           </div>

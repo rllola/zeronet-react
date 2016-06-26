@@ -105,4 +105,4 @@ ZeroFrame = (function() {
 
 })();
 
-window.ZeroFrame = ZeroFrame;
+window.ZeroFrame = new ZeroFrame();

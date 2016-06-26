@@ -8,7 +8,7 @@ import MainLayout from './components/main.layout';
 import Home from './components/home';
 import Tutorial from './components/tutorial';
 import AboutMe from './components/about-me';
-import Comments from './components/comments';
+import Messages from './components/messages';
 
 
 export default (
@@ -20,7 +20,7 @@ export default (
 
       <Route path="about-me" component={AboutMe} />
 
-      <Route path="comments" component={Comments} />
+      <Route path="messages" component={Messages} />
 
     </Route>
   </Router>

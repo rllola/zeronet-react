@@ -28,6 +28,23 @@ We need to recreate the bundle.js file when one of our project file is modified.
 gulp
 ```
 
+## Setup
+
+ZeroFrame module allow you to send query to the server to get database information.
+
+First you need to create your dbschema.json and data/users/content.json file. See tutorial :
+[http://127.0.0.1:43110/Blog.ZeroNetwork.bit/?Post:46:ZeroNet+site+development+tutorial+2](http://127.0.0.1:43110/Blog.ZeroNetwork.bit/?Post:46:ZeroNet+site+development+tutorial+2)
+
+You can also check the doc : [https://zeronet.readthedocs.io/en/latest/site_development/dbschema_json/](https://zeronet.readthedocs.io/en/latest/site_development/dbschema_json/)
+
+You will also need to modify your root content.json file.
+
+AND DONT FORGET TO SIGN YOUR data/users/content.json (YES, I HAVE LOST MANY HOURS BECAUSE I FORGOT TO DO IT).
+
+Then you can use ZeroFrame API : [https://zeronet.readthedocs.io/en/latest/site_development/zeroframe_api_reference/](https://zeronet.readthedocs.io/en/latest/site_development/zeroframe_api_reference/)
+
+This API is not only for database queries. See documentation for more information.
+
 # NOTES
 
 ## Router

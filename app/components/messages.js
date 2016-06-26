@@ -1,22 +1,22 @@
 import React from 'react';
 
-const Comments = React.createClass({
+const Messages = React.createClass({
 
   componentDidMount: function() {
     var _this = this;
-    console.log('Banana pancakes');
+    ZeroFrame.log('Banana Pancake');
   },
 
   render: function() {
     return (
       <article>
-        <h1>Leave me a comment</h1>
+        <h1>Leave me a message</h1>
         <p>
-          Leave me a comment on this tutorial.
+          Tell me what you think of it !
         </p>
       </article>
     );
   }
 });
 
-export default Comments;
+export default Messages;
