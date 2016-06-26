@@ -58,12 +58,16 @@
 	
 	var _router2 = _interopRequireDefault(_router);
 	
+	var _zeroframe = __webpack_require__(222);
+	
+	var _zeroframe2 = _interopRequireDefault(_zeroframe);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	// Now we can attach the router to the 'root' element like this:
-	_reactDom2.default.render(_router2.default, document.getElementById('root'));
 	
 	// Notice that we've organized all of our routes into a separate file.
+	_reactDom2.default.render(_router2.default, document.getElementById('root'));
 
 /***/ },
 /* 1 */
@@ -19726,9 +19730,13 @@
 	
 	var _aboutMe2 = _interopRequireDefault(_aboutMe);
 	
+	var _comments = __webpack_require__(221);
+	
+	var _comments2 = _interopRequireDefault(_comments);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	// Layouts
+	// Pages
 	exports.default = _react2.default.createElement(
 	  _reactRouter.Router,
 	  { history: _reactRouter.browserHistory },
@@ -19737,11 +19745,12 @@
 	    { component: _main2.default },
 	    _react2.default.createElement(_reactRouter.Route, { path: '/1JfWHNDQeR71Uf8EtyRqCNJ1Ked5t1pukk/', component: _home2.default }),
 	    _react2.default.createElement(_reactRouter.Route, { path: 'tutorial', component: _tutorial2.default }),
-	    _react2.default.createElement(_reactRouter.Route, { path: 'about-me', component: _aboutMe2.default })
+	    _react2.default.createElement(_reactRouter.Route, { path: 'about-me', component: _aboutMe2.default }),
+	    _react2.default.createElement(_reactRouter.Route, { path: 'comments', component: _comments2.default })
 	  )
 	);
 	
-	// Pages
+	// Layouts
 
 /***/ },
 /* 160 */
@@ -24895,7 +24904,7 @@
 	              { className: 'nav-item' },
 	              _react2.default.createElement(
 	                _reactRouter.Link,
-	                { to: 'about-me', className: 'nav-link', href: '#' },
+	                { to: 'about-me', className: 'nav-link' },
 	                'About me'
 	              )
 	            ),
@@ -24904,7 +24913,7 @@
 	              { className: 'nav-item' },
 	              _react2.default.createElement(
 	                _reactRouter.Link,
-	                { to: 'comment', className: 'nav-link', href: '#' },
+	                { to: 'comments', className: 'nav-link' },
 	                'Leave a comment'
 	              )
 	            )
@@ -25043,6 +25052,219 @@
 	});
 	
 	exports.default = AboutMe;
+
+/***/ },
+/* 221 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var Comments = _react2.default.createClass({
+	  displayName: 'Comments',
+	
+	
+	  componentDidMount: function componentDidMount() {
+	    var _this = this;
+	    console.log('Banana pancakes');
+	  },
+	
+	  render: function render() {
+	    return _react2.default.createElement(
+	      'article',
+	      null,
+	      _react2.default.createElement(
+	        'h1',
+	        null,
+	        'Leave me a comment'
+	      ),
+	      _react2.default.createElement(
+	        'p',
+	        null,
+	        'Leave me a comment on this tutorial.'
+	      )
+	    );
+	  }
+	});
+	
+	exports.default = Comments;
+
+/***/ },
+/* 222 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	var Class,
+	    slice = [].slice;
+	
+	Class = function () {
+	  function Class() {}
+	
+	  Class.prototype.trace = true;
+	
+	  Class.prototype.log = function () {
+	    var args;
+	    args = 1 <= arguments.length ? slice.call(arguments, 0) : [];
+	    if (!this.trace) {
+	      return;
+	    }
+	    if (typeof console === 'undefined') {
+	      return;
+	    }
+	    args.unshift("[" + this.constructor.name + "]");
+	    console.log.apply(console, args);
+	    return this;
+	  };
+	
+	  Class.prototype.logStart = function () {
+	    var args, name;
+	    name = arguments[0], args = 2 <= arguments.length ? slice.call(arguments, 1) : [];
+	    if (!this.trace) {
+	      return;
+	    }
+	    this.logtimers || (this.logtimers = {});
+	    this.logtimers[name] = +new Date();
+	    if (args.length > 0) {
+	      this.log.apply(this, ["" + name].concat(slice.call(args), ["(started)"]));
+	    }
+	    return this;
+	  };
+	
+	  Class.prototype.logEnd = function () {
+	    var args, ms, name;
+	    name = arguments[0], args = 2 <= arguments.length ? slice.call(arguments, 1) : [];
+	    ms = +new Date() - this.logtimers[name];
+	    this.log.apply(this, ["" + name].concat(slice.call(args), ["(Done in " + ms + "ms)"]));
+	    return this;
+	  };
+	
+	  return Class;
+	}();
+	
+	window.Class = Class;
+	
+	var ZeroFrame,
+	    bind = function bind(fn, me) {
+	  return function () {
+	    return fn.apply(me, arguments);
+	  };
+	},
+	    extend = function extend(child, parent) {
+	  for (var key in parent) {
+	    if (hasProp.call(parent, key)) child[key] = parent[key];
+	  }function ctor() {
+	    this.constructor = child;
+	  }ctor.prototype = parent.prototype;child.prototype = new ctor();child.__super__ = parent.prototype;return child;
+	},
+	    hasProp = {}.hasOwnProperty;
+	
+	ZeroFrame = function (superClass) {
+	  extend(ZeroFrame, superClass);
+	
+	  function ZeroFrame(url) {
+	    this.onCloseWebsocket = bind(this.onCloseWebsocket, this);
+	    this.onOpenWebsocket = bind(this.onOpenWebsocket, this);
+	    this.onRequest = bind(this.onRequest, this);
+	    this.onMessage = bind(this.onMessage, this);
+	    this.url = url;
+	    this.waiting_cb = {};
+	    this.connect();
+	    this.next_message_id = 1;
+	    this.init();
+	  }
+	
+	  ZeroFrame.prototype.init = function () {
+	    return this;
+	  };
+	
+	  ZeroFrame.prototype.connect = function () {
+	    this.target = window.parent;
+	    window.addEventListener("message", this.onMessage, false);
+	    return this.cmd("innerReady");
+	  };
+	
+	  ZeroFrame.prototype.onMessage = function (e) {
+	    var cmd, message;
+	    message = e.data;
+	    cmd = message.cmd;
+	    if (cmd === "response") {
+	      if (this.waiting_cb[message.to] != null) {
+	        return this.waiting_cb[message.to](message.result);
+	      } else {
+	        return this.log("Websocket callback not found:", message);
+	      }
+	    } else if (cmd === "wrapperReady") {
+	      return this.cmd("innerReady");
+	    } else if (cmd === "ping") {
+	      return this.response(message.id, "pong");
+	    } else if (cmd === "wrapperOpenedWebsocket") {
+	      return this.onOpenWebsocket();
+	    } else if (cmd === "wrapperClosedWebsocket") {
+	      return this.onCloseWebsocket();
+	    } else {
+	      return this.onRequest(cmd, message.params);
+	    }
+	  };
+	
+	  ZeroFrame.prototype.onRequest = function (cmd, message) {
+	    return this.log("Unknown request", message);
+	  };
+	
+	  ZeroFrame.prototype.response = function (to, result) {
+	    return this.send({
+	      "cmd": "response",
+	      "to": to,
+	      "result": result
+	    });
+	  };
+	
+	  ZeroFrame.prototype.cmd = function (cmd, params, cb) {
+	    if (params == null) {
+	      params = {};
+	    }
+	    if (cb == null) {
+	      cb = null;
+	    }
+	    return this.send({
+	      "cmd": cmd,
+	      "params": params
+	    }, cb);
+	  };
+	
+	  ZeroFrame.prototype.send = function (message, cb) {
+	    if (cb == null) {
+	      cb = null;
+	    }
+	    message.id = this.next_message_id;
+	    this.next_message_id += 1;
+	    this.target.postMessage(message, "*");
+	    if (cb) {
+	      return this.waiting_cb[message.id] = cb;
+	    }
+	  };
+	
+	  ZeroFrame.prototype.onOpenWebsocket = function () {
+	    return this.log("Websocket open");
+	  };
+	
+	  ZeroFrame.prototype.onCloseWebsocket = function () {
+	    return this.log("Websocket close");
+	  };
+	
+	  return ZeroFrame;
+	}(Class);
+	
+	window.ZeroFrame = new ZeroFrame();
 
 /***/ }
 /******/ ]);

@@ -19,10 +19,10 @@ const MainLayout = React.createClass({
                 <Link to="tutorial" className="nav-link">Tutorial</Link>
               </li>
               <li className="nav-item">
-                <Link to="about-me" className="nav-link" href="#">About me</Link>
+                <Link to="about-me" className="nav-link">About me</Link>
               </li>
               <li className="nav-item">
-                <Link to="comment" className="nav-link" href="#">Leave a comment</Link>
+                <Link to="comments" className="nav-link">Leave a comment</Link>
               </li>
             </ul>
           </div>
