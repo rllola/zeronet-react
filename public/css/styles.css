@@ -1,0 +1,15 @@
+.app {
+  display: flex;
+}
+
+aside.primary-aside {
+  width: 200px;
+}
+
+aside.primary-aside a.active {
+    font-weight: bold;
+}
+
+main {
+  flex: 1;
+}
