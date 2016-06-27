@@ -105,4 +105,4 @@ ZeroFrame = (function() {
 
 })();
 
-window.ZeroFrame = new ZeroFrame();
+module.exports = new ZeroFrame();

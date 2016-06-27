@@ -25063,18 +25063,58 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
+	var _zeroframe = __webpack_require__(222);
+	
+	var _zeroframe2 = _interopRequireDefault(_zeroframe);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var Messages = _react2.default.createClass({
 	  displayName: 'Messages',
 	
+	  getInitialState: function getInitialState() {
+	    return {
+	      auth: false,
+	      messages: []
+	    };
+	  },
 	
 	  componentDidMount: function componentDidMount() {
 	    var _this = this;
-	    console.log('Banana pancakes');
+	    _zeroframe2.default.cmd("siteInfo", {}, function (info) {
+	      console.log(info);
+	    });
 	  },
 	
 	  render: function render() {
+	    var form;
+	    if (this.state.auth) {
+	      form = _react2.default.createElement(
+	        'form',
+	        null,
+	        _react2.default.createElement(
+	          'fieldset',
+	          { className: 'form-group' },
+	          _react2.default.createElement(
+	            'label',
+	            { htmlFor: 'message' },
+	            'Your message'
+	          ),
+	          _react2.default.createElement('textarea', { type: 'text', className: 'form-control', id: 'message' })
+	        ),
+	        _react2.default.createElement(
+	          'button',
+	          { type: 'submit', className: 'btn btn-primary' },
+	          'Submit'
+	        )
+	      );
+	    } else {
+	      form = _react2.default.createElement(
+	        'p',
+	        null,
+	        'Too bad you need to be auth to post a message.'
+	      );
+	    }
 	    return _react2.default.createElement(
 	      'article',
 	      null,
@@ -25087,12 +25127,134 @@
 	        'p',
 	        null,
 	        'Tell me what you think of it !'
-	      )
+	      ),
+	      form
 	    );
 	  }
 	});
 	
+	// import ZeroFrame module
+	
+	
 	exports.default = Messages;
+
+/***/ },
+/* 222 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	var ZeroFrame,
+	    bind = function bind(fn, me) {
+	  return function () {
+	    return fn.apply(me, arguments);
+	  };
+	},
+	    slice = [].slice;
+	
+	ZeroFrame = function () {
+	  function ZeroFrame(url) {
+	    this.onCloseWebsocket = bind(this.onCloseWebsocket, this);
+	    this.onOpenWebsocket = bind(this.onOpenWebsocket, this);
+	    this.route = bind(this.route, this);
+	    this.onMessage = bind(this.onMessage, this);
+	    this.url = url;
+	    this.waiting_cb = {};
+	    this.wrapper_nonce = document.location.href.replace(/.*wrapper_nonce=([A-Za-z0-9]+).*/, "$1");
+	    this.connect();
+	    this.next_message_id = 1;
+	    this.init();
+	  }
+	
+	  ZeroFrame.prototype.init = function () {
+	    return this;
+	  };
+	
+	  ZeroFrame.prototype.connect = function () {
+	    this.target = window.parent;
+	    window.addEventListener("message", this.onMessage, false);
+	    return this.cmd("innerReady");
+	  };
+	
+	  ZeroFrame.prototype.onMessage = function (e) {
+	    var cmd, message;
+	    message = e.data;
+	    cmd = message.cmd;
+	    if (cmd === "response") {
+	      if (this.waiting_cb[message.to] != null) {
+	        return this.waiting_cb[message.to](message.result);
+	      } else {
+	        return this.log("Websocket callback not found:", message);
+	      }
+	    } else if (cmd === "wrapperReady") {
+	      return this.cmd("innerReady");
+	    } else if (cmd === "ping") {
+	      return this.response(message.id, "pong");
+	    } else if (cmd === "wrapperOpenedWebsocket") {
+	      return this.onOpenWebsocket();
+	    } else if (cmd === "wrapperClosedWebsocket") {
+	      return this.onCloseWebsocket();
+	    } else {
+	      return this.route(cmd, message);
+	    }
+	  };
+	
+	  ZeroFrame.prototype.route = function (cmd, message) {
+	    return this.log("Unknown command", message);
+	  };
+	
+	  ZeroFrame.prototype.response = function (to, result) {
+	    return this.send({
+	      "cmd": "response",
+	      "to": to,
+	      "result": result
+	    });
+	  };
+	
+	  ZeroFrame.prototype.cmd = function (cmd, params, cb) {
+	    if (params == null) {
+	      params = {};
+	    }
+	    if (cb == null) {
+	      cb = null;
+	    }
+	    return this.send({
+	      "cmd": cmd,
+	      "params": params
+	    }, cb);
+	  };
+	
+	  ZeroFrame.prototype.send = function (message, cb) {
+	    if (cb == null) {
+	      cb = null;
+	    }
+	    message.wrapper_nonce = this.wrapper_nonce;
+	    message.id = this.next_message_id;
+	    this.next_message_id += 1;
+	    this.target.postMessage(message, "*");
+	    if (cb) {
+	      return this.waiting_cb[message.id] = cb;
+	    }
+	  };
+	
+	  ZeroFrame.prototype.log = function () {
+	    var args;
+	    args = 1 <= arguments.length ? slice.call(arguments, 0) : [];
+	    return console.log.apply(console, ["[ZeroFrame]"].concat(slice.call(args)));
+	  };
+	
+	  ZeroFrame.prototype.onOpenWebsocket = function () {
+	    return this.log("Websocket open");
+	  };
+	
+	  ZeroFrame.prototype.onCloseWebsocket = function () {
+	    return this.log("Websocket close");
+	  };
+	
+	  return ZeroFrame;
+	}();
+	
+	module.exports = new ZeroFrame();
 
 /***/ }
 /******/ ]);
