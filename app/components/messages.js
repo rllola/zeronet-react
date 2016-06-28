@@ -15,12 +15,20 @@ const Messages = React.createClass({
   componentDidMount: function() {
     var _this = this;
     ZeroFrame.cmd("siteInfo", {}, function(info) {
-      if info.cert_user_id === null {
+      if (info.cert_user_id === null) {
         _this.state.auth = false;
       } else {
         _this.state.auth = info.cert_user_id;
       }
     });
+  },
+
+  handleClick: function() {
+    this.setState({}, function() {
+      ZeroFrame.cmd("certSelect", [["zeroid.bit"]], function (data) {
+        this.state.cert_user_id = data.params.cert_user_id;
+      })
+    }.bind(this));
   },
 
   render: function() {
@@ -37,7 +45,7 @@ const Messages = React.createClass({
               </form>
     } else {
       form =  <p>Too bad you need to be auth to post a message.<br/>
-                <a>Select user</a>
+                <button type="button" className="btn btn-primary" onClick={this.handleClick}>Select user</button>
               </p>
     }
     return (

@@ -25082,8 +25082,20 @@
 	  componentDidMount: function componentDidMount() {
 	    var _this = this;
 	    _zeroframe2.default.cmd("siteInfo", {}, function (info) {
-	      console.log(info);
+	      if (info.cert_user_id === null) {
+	        _this.state.auth = false;
+	      } else {
+	        _this.state.auth = info.cert_user_id;
+	      }
 	    });
+	  },
+	
+	  handleClick: function handleClick() {
+	    this.setState({}, function () {
+	      _zeroframe2.default.cmd("certSelect", [["zeroid.bit"]], function (data) {
+	        this.state.cert_user_id = data.params.cert_user_id;
+	      });
+	    }.bind(this));
 	  },
 	
 	  render: function render() {
@@ -25092,6 +25104,12 @@
 	      form = _react2.default.createElement(
 	        'form',
 	        null,
+	        _react2.default.createElement(
+	          'h4',
+	          null,
+	          'Glad to meet you ',
+	          this.state.auth
+	        ),
 	        _react2.default.createElement(
 	          'fieldset',
 	          { className: 'form-group' },
@@ -25112,7 +25130,13 @@
 	      form = _react2.default.createElement(
 	        'p',
 	        null,
-	        'Too bad you need to be auth to post a message.'
+	        'Too bad you need to be auth to post a message.',
+	        _react2.default.createElement('br', null),
+	        _react2.default.createElement(
+	          'button',
+	          { type: 'button', className: 'btn btn-primary', onClick: this.handleClick },
+	          'Select user'
+	        )
 	      );
 	    }
 	    return _react2.default.createElement(
