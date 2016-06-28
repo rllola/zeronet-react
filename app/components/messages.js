@@ -15,7 +15,11 @@ const Messages = React.createClass({
   componentDidMount: function() {
     var _this = this;
     ZeroFrame.cmd("siteInfo", {}, function(info) {
-      console.log(info);
+      if info.cert_user_id === null {
+        _this.state.auth = false;
+      } else {
+        _this.state.auth = info.cert_user_id;
+      }
     });
   },
 
@@ -23,6 +27,7 @@ const Messages = React.createClass({
     var form;
     if (this.state.auth) {
       form =  <form>
+                <h4>Glad to meet you {this.state.auth}</h4>
                 <fieldset className="form-group">
                   <label htmlFor="message">Your message</label>
                   <textarea type="text" className="form-control" id="message">
@@ -31,7 +36,9 @@ const Messages = React.createClass({
                 <button type="submit" className="btn btn-primary">Submit</button>
               </form>
     } else {
-      form = <p>Too bad you need to be auth to post a message.</p>
+      form =  <p>Too bad you need to be auth to post a message.<br/>
+                <a>Select user</a>
+              </p>
     }
     return (
       <article>
