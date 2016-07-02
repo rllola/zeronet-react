@@ -25080,27 +25080,23 @@
 	  },
 	
 	  componentDidMount: function componentDidMount() {
-	    var _this = this;
-	    _zeroframe2.default.cmd("siteInfo", {}, function (info) {
-	      if (info.cert_user_id === null) {
-	        _this.state.auth = false;
-	      } else {
-	        _this.state.auth = info.cert_user_id;
-	      }
+	    _zeroframe2.default.cmd("siteInfo", {}, function (data) {
+	      console.log(data);
+	      this.setState({ auth: false });
 	    });
 	  },
 	
 	  handleClick: function handleClick() {
-	    this.setState({}, function () {
-	      _zeroframe2.default.cmd("certSelect", [["zeroid.bit"]], function (data) {
-	        this.state.cert_user_id = data.params.cert_user_id;
-	      });
-	    }.bind(this));
+	    _zeroframe2.default.cmd("certSelect", [["zeroid.bit"]], function () {
+	      console.log(chat);
+	    });
+	    this.setState({ auth: 'lola@zeroid.bit' });
 	  },
 	
 	  render: function render() {
 	    var form;
 	    if (this.state.auth) {
+	      console.log('chat');
 	      form = _react2.default.createElement(
 	        'form',
 	        null,
@@ -25127,6 +25123,7 @@
 	        )
 	      );
 	    } else {
+	      console.log('chien');
 	      form = _react2.default.createElement(
 	        'p',
 	        null,
@@ -25204,6 +25201,8 @@
 	    var cmd, message;
 	    message = e.data;
 	    cmd = message.cmd;
+	    console.log(cmd);
+	    console.log(message);
 	    if (cmd === "response") {
 	      if (this.waiting_cb[message.to] != null) {
 	        return this.waiting_cb[message.to](message.result);
