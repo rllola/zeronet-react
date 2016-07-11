@@ -52,3 +52,10 @@ This API is not only for database queries. See documentation for more informatio
 Because in the url we have the adress of website we need to change the url base so it doesnt interfer with react-router.
 
 Change the address in `app/router.js` for the one of your website.
+
+## browserHistory
+
+```
+Warning: [history] Unable to save state; sessionStorage is not available due to security settings
+```
+No idea how to fix this.
