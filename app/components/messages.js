@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 // import ZeroFrame module
 import ZeroFrame from '../zeroframe/zeroframe';
