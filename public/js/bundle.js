@@ -25079,24 +25079,30 @@
 	    };
 	  },
 	
+	  updateUser: function updateUser(e) {
+	    console.log(e.data);
+	    console.log('lol', this.state);
+	    if (e.data.params) {
+	      this.setState({ auth: e.data.params.cert_user_id });
+	    } else if (e.data.results) {
+	      this.setState({ auth: e.data.result.cert_user_id });
+	    }
+	  },
+	
 	  componentDidMount: function componentDidMount() {
+	    window.addEventListener("message", this.updateUser, false);
 	    _zeroframe2.default.cmd("siteInfo", {}, function (data) {
 	      console.log(data);
-	      this.setState({ auth: false });
 	    });
 	  },
 	
 	  handleClick: function handleClick() {
-	    _zeroframe2.default.cmd("certSelect", [["zeroid.bit"]], function () {
-	      console.log(chat);
-	    });
-	    this.setState({ auth: 'lola@zeroid.bit' });
+	    _zeroframe2.default.cmd("certSelect", [["zeroid.bit"]], null);
 	  },
 	
 	  render: function render() {
 	    var form;
 	    if (this.state.auth) {
-	      console.log('chat');
 	      form = _react2.default.createElement(
 	        'form',
 	        null,
@@ -25123,7 +25129,6 @@
 	        )
 	      );
 	    } else {
-	      console.log('chien');
 	      form = _react2.default.createElement(
 	        'p',
 	        null,
