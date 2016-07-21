@@ -1,0 +1,47 @@
+{
+ "address": "1JfWHNDQeR71Uf8EtyRqCNJ1Ked5t1pukk",
+ "description": "",
+ "files": {
+  "dbschema.json": {
+   "sha512": "4932683fbaa96d677841552a86ccef9dd9e330f25413de79f5e9f7f70e631edd",
+   "size": 635
+  },
+  "index.html": {
+   "sha512": "28a648983ecef93bca4d6dd8aaa66792f81dafefea0e15e2a324e93c10cdb98a",
+   "size": 259
+  },
+  "public/css/all.css": {
+   "sha512": "6b8aad739b320de9913666abd29e047704eefc9fcc397a6cdbdf4b76a993fc3c",
+   "size": 95564
+  },
+  "public/js/all.js": {
+   "sha512": "49c2ba046e507e349cce613ea99a27ca6b071610f7e623b0bc5781a3f92ff046",
+   "size": 851887
+  },
+  "public/js/all.map": {
+   "sha512": "ab8d103bb569ffd811070e321d5e4aafc5c5cf951bbfcf37db6a628a5d4e30f7",
+   "size": 996967
+  }
+ },
+ "ignore": "(data/.*|.git|node_modules|app|gulpfile.js|package.json|README.md|webpack.config.js)",
+ "includes": {
+  "data/users/content.json": {
+   "signers": [],
+   "signers_required": 1
+  }
+ },
+ "inner_path": "content.json",
+ "modified": 1469120830.298458,
+ "postmessage_nonce_security": true,
+ "sign": [
+  80327523529582906297706851048934935804452528391468923999356910107908602844807,
+  75658020666700868985852168446634331634862210836043090770065706790117069738465
+ ],
+ "signers_sign": "HOdAJWAG+iSocenYXpVLz2dKbilCdDeYnZ4F2FYmR9B1h9Lzu7qlKVENhkG5jbKuGasuXTbbuzeEed6Y/sPb8a4=",
+ "signs": {
+  "1JfWHNDQeR71Uf8EtyRqCNJ1Ked5t1pukk": "HLt+rzzbCBdifgwmSLTwoh/A478rURFF0LV/vsvuTXllIVq4FsrgqgySj5/xFOfxsmjdh4hAJ/Bs1DjBZlPDUrs="
+ },
+ "signs_required": 1,
+ "title": "ZeroNet/React starter kit",
+ "zeronet_version": "0.3.7"
+}

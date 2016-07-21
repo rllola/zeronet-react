@@ -30,8 +30,6 @@ ZeroFrame = (function() {
     var cmd, message;
     message = e.data;
     cmd = message.cmd;
-    console.log(cmd);
-    console.log(message);
     if (cmd === "response") {
       if (this.waiting_cb[message.to] != null) {
         return this.waiting_cb[message.to](message.result);

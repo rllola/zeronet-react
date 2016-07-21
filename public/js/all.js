@@ -26539,31 +26539,75 @@
 	  getInitialState: function getInitialState() {
 	    return {
 	      auth: false,
+	      auth_address: null,
 	      messages: []
 	    };
 	  },
 	
+	  updateUser: function updateUser(e) {
+	    console.log(e.data);
+	    if (e.data.params) {
+	      this.setState({ auth: e.data.params.cert_user_id, auth_address: e.data.params.auth_address });
+	    } else if (e.data.result) {
+	      if (e.data.result.cert_user_id !== undefined) {
+	        this.setState({ auth: e.data.result.cert_user_id, auth_address: e.data.result.auth_address });
+	      }
+	    }
+	  },
+	
+	  updateMessages: function updateMessages(messages) {
+	    this.setState({ messages: messages });
+	  },
+	
 	  componentDidMount: function componentDidMount() {
+	    window.addEventListener("message", this.updateUser, false);
 	    _zeroframe2.default.cmd("siteInfo", {}, function (data) {
 	      console.log(data);
-	      this.setState({ auth: false });
 	    });
+	    _zeroframe2.default.cmd("dbQuery", ["SELECT * FROM message ORDER BY date_added"], this.updateMessages);
 	  },
 	
 	  handleClick: function handleClick() {
-	    _zeroframe2.default.cmd("certSelect", [["zeroid.bit"]], function () {
-	      console.log(chat);
+	    _zeroframe2.default.cmd("certSelect", [["zeroid.bit"]], null);
+	  },
+	
+	  handleTextChange: function handleTextChange(e) {
+	    this.setState({ text: e.target.value });
+	  },
+	
+	  handleSubmit: function handleSubmit(e) {
+	    var _this = this;
+	
+	    e.preventDefault();
+	    console.log(this.state.auth_address);
+	    var inner_path = "data/users/" + this.state.auth_address + "/data.json";
+	    _zeroframe2.default.cmd("fileGet", { "inner_path": inner_path, "required": false }, function (data) {
+	      if (data) {
+	        data = JSON.parse(data);
+	      } else {
+	        data = { "message": [] };
+	      }
+	      data.message.push({
+	        "body": _this.state.text,
+	        "date_added": new Date()
+	      });
+	      var json_raw = unescape(encodeURIComponent(JSON.stringify(data, undefined, '\t')));
+	      _zeroframe2.default.cmd("fileWrite", [inner_path, btoa(json_raw)], function (res) {
+	        if (res == "ok") {
+	          console.log('ok');
+	        } else {
+	          _zeroframe2.default.cmd("wrapperNotification", ["error", "File write error:" + res]);
+	        }
+	      });
 	    });
-	    this.setState({ auth: 'lola@zeroid.bit' });
 	  },
 	
 	  render: function render() {
-	    var form;
+	    var form, messageArr;
 	    if (this.state.auth) {
-	      console.log('chat');
 	      form = _react2.default.createElement(
 	        'form',
-	        null,
+	        { onSubmit: this.handleSubmit },
 	        _react2.default.createElement(
 	          'h4',
 	          null,
@@ -26578,7 +26622,12 @@
 	            { htmlFor: 'message' },
 	            'Your message'
 	          ),
-	          _react2.default.createElement('textarea', { type: 'text', className: 'form-control', id: 'message' })
+	          _react2.default.createElement('textarea', {
+	            id: 'message',
+	            type: 'text',
+	            className: 'form-control',
+	            value: this.state.text,
+	            onChange: this.handleTextChange })
 	        ),
 	        _react2.default.createElement(
 	          'button',
@@ -26587,7 +26636,6 @@
 	        )
 	      );
 	    } else {
-	      console.log('chien');
 	      form = _react2.default.createElement(
 	        'p',
 	        null,
@@ -26600,6 +26648,15 @@
 	        )
 	      );
 	    }
+	
+	    messageArr = this.state.messages.map(function (message) {
+	      return _react2.default.createElement(
+	        'li',
+	        null,
+	        message.body
+	      );
+	    });
+	
 	    return _react2.default.createElement(
 	      'article',
 	      null,
@@ -26613,7 +26670,12 @@
 	        null,
 	        'Tell me what you think of it !'
 	      ),
-	      form
+	      form,
+	      _react2.default.createElement(
+	        'ul',
+	        null,
+	        messageArr
+	      )
 	    );
 	  }
 	});
@@ -26665,8 +26727,6 @@
 	    var cmd, message;
 	    message = e.data;
 	    cmd = message.cmd;
-	    console.log(cmd);
-	    console.log(message);
 	    if (cmd === "response") {
 	      if (this.waiting_cb[message.to] != null) {
 	        return this.waiting_cb[message.to](message.result);
@@ -26785,4 +26845,4 @@
 
 /***/ }
 /******/ ]);
-//# sourceMappingURL=bundle.map
+//# sourceMappingURL=all.map
