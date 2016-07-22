@@ -6,9 +6,9 @@ import { createStore } from 'redux';
 
 // Notice that we've organized all of our routes into a separate file.
 import Router from './router';
-import { reducer } from './reducers';
+import rootReducer from './reducers';
 
-let store = createStore(reducer);
+let store = createStore(rootReducer);
 
 console.log(store);
 

@@ -62,12 +62,14 @@
 	
 	var _reducers = __webpack_require__(245);
 	
+	var _reducers2 = _interopRequireDefault(_reducers);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	// Notice that we've organized all of our routes into a separate file.
 	
 	
-	var store = (0, _redux.createStore)(_reducers.reducer);
+	var store = (0, _redux.createStore)(_reducers2.default);
 	
 	console.log(store);
 	
@@ -26300,6 +26302,8 @@
 	  value: true
 	});
 	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
 	var _react = __webpack_require__(1);
 	
 	var _react2 = _interopRequireDefault(_react);
@@ -26308,86 +26312,105 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var MainLayout = _react2.default.createClass({
-	  displayName: 'MainLayout',
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	  render: function render() {
-	    return _react2.default.createElement(
-	      'div',
-	      { className: 'app' },
-	      _react2.default.createElement(
-	        'nav',
-	        { className: 'navbar navbar-light bg-faded', id: 'CollapsingNavbar' },
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var MainLayout = function (_Component) {
+	  _inherits(MainLayout, _Component);
+	
+	  function MainLayout() {
+	    _classCallCheck(this, MainLayout);
+	
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(MainLayout).apply(this, arguments));
+	  }
+	
+	  _createClass(MainLayout, [{
+	    key: 'render',
+	    value: function render() {
+	      console.log(this.props);
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'app' },
 	        _react2.default.createElement(
-	          'button',
-	          { className: 'navbar-toggler hidden-sm-up', type: 'button', 'data-toggle': 'collapse', 'data-target': '#CollapsingNavbar' },
-	          '☰'
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'collapse navbar-toggleable-xs' },
+	          'nav',
+	          { className: 'navbar navbar-light bg-faded', id: 'CollapsingNavbar' },
 	          _react2.default.createElement(
-	            _reactRouter.Link,
-	            { to: '1JfWHNDQeR71Uf8EtyRqCNJ1Ked5t1pukk/', className: 'navbar-brand' },
-	            'Zereact'
+	            'button',
+	            { className: 'navbar-toggler hidden-sm-up', type: 'button', 'data-toggle': 'collapse', 'data-target': '#CollapsingNavbar' },
+	            '☰'
 	          ),
 	          _react2.default.createElement(
-	            'ul',
-	            { className: 'nav navbar-nav' },
+	            'div',
+	            { className: 'collapse navbar-toggleable-xs' },
 	            _react2.default.createElement(
-	              'li',
-	              { className: 'nav-item active' },
+	              _reactRouter.Link,
+	              { to: '1JfWHNDQeR71Uf8EtyRqCNJ1Ked5t1pukk/', className: 'navbar-brand' },
+	              'Zereact'
+	            ),
+	            _react2.default.createElement(
+	              'ul',
+	              { className: 'nav navbar-nav' },
 	              _react2.default.createElement(
-	                _reactRouter.Link,
-	                { to: '1JfWHNDQeR71Uf8EtyRqCNJ1Ked5t1pukk/', className: 'nav-link' },
-	                'Home ',
+	                'li',
+	                { className: 'nav-item active' },
 	                _react2.default.createElement(
-	                  'span',
-	                  { className: 'sr-only' },
-	                  '(current)'
+	                  _reactRouter.Link,
+	                  { to: '1JfWHNDQeR71Uf8EtyRqCNJ1Ked5t1pukk/', className: 'nav-link' },
+	                  'Home ',
+	                  _react2.default.createElement(
+	                    'span',
+	                    { className: 'sr-only' },
+	                    '(current)'
+	                  )
 	                )
-	              )
-	            ),
-	            _react2.default.createElement(
-	              'li',
-	              { className: 'nav-item' },
+	              ),
 	              _react2.default.createElement(
-	                _reactRouter.Link,
-	                { to: 'tutorial', className: 'nav-link' },
-	                'Tutorial'
-	              )
-	            ),
-	            _react2.default.createElement(
-	              'li',
-	              { className: 'nav-item' },
+	                'li',
+	                { className: 'nav-item' },
+	                _react2.default.createElement(
+	                  _reactRouter.Link,
+	                  { to: 'tutorial', className: 'nav-link' },
+	                  'Tutorial'
+	                )
+	              ),
 	              _react2.default.createElement(
-	                _reactRouter.Link,
-	                { to: 'about-me', className: 'nav-link' },
-	                'About me'
-	              )
-	            ),
-	            _react2.default.createElement(
-	              'li',
-	              { className: 'nav-item' },
+	                'li',
+	                { className: 'nav-item' },
+	                _react2.default.createElement(
+	                  _reactRouter.Link,
+	                  { to: 'about-me', className: 'nav-link' },
+	                  'About me'
+	                )
+	              ),
 	              _react2.default.createElement(
-	                _reactRouter.Link,
-	                { to: 'messages', className: 'nav-link' },
-	                'Leave a message'
+	                'li',
+	                { className: 'nav-item' },
+	                _react2.default.createElement(
+	                  _reactRouter.Link,
+	                  { to: 'messages', className: 'nav-link' },
+	                  'Leave a message'
+	                )
 	              )
 	            )
 	          )
+	        ),
+	        _react2.default.createElement(
+	          'main',
+	          { className: 'container' },
+	          this.props.children
 	        )
-	      ),
-	      _react2.default.createElement(
-	        'main',
-	        { className: 'container' },
-	        this.props.children
-	      )
-	    );
-	  }
-	});
+	      );
+	    }
+	  }]);
+	
+	  return MainLayout;
+	}(_react.Component);
 	
 	exports.default = MainLayout;
+	;
 
 /***/ },
 /* 240 */
@@ -26521,11 +26544,11 @@
 	  value: true
 	});
 	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
 	var _react = __webpack_require__(1);
 	
 	var _react2 = _interopRequireDefault(_react);
-	
-	var _reactRedux = __webpack_require__(159);
 	
 	var _zeroframe = __webpack_require__(244);
 	
@@ -26533,157 +26556,184 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var Messages = _react2.default.createClass({
-	  displayName: 'Messages',
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	  getInitialState: function getInitialState() {
-	    return {
-	      auth: false,
-	      auth_address: null,
-	      messages: []
-	    };
-	  },
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 	
-	  updateUser: function updateUser(e) {
-	    console.log(e.data);
-	    if (e.data.params) {
-	      this.setState({ auth: e.data.params.cert_user_id, auth_address: e.data.params.auth_address });
-	    } else if (e.data.result) {
-	      if (e.data.result.cert_user_id !== undefined) {
-	        this.setState({ auth: e.data.result.cert_user_id, auth_address: e.data.result.auth_address });
-	      }
-	    }
-	  },
-	
-	  updateMessages: function updateMessages(messages) {
-	    this.setState({ messages: messages });
-	  },
-	
-	  componentDidMount: function componentDidMount() {
-	    window.addEventListener("message", this.updateUser, false);
-	    _zeroframe2.default.cmd("siteInfo", {}, function (data) {
-	      console.log(data);
-	    });
-	    _zeroframe2.default.cmd("dbQuery", ["SELECT * FROM message ORDER BY date_added"], this.updateMessages);
-	  },
-	
-	  handleClick: function handleClick() {
-	    _zeroframe2.default.cmd("certSelect", [["zeroid.bit"]], null);
-	  },
-	
-	  handleTextChange: function handleTextChange(e) {
-	    this.setState({ text: e.target.value });
-	  },
-	
-	  handleSubmit: function handleSubmit(e) {
-	    var _this = this;
-	
-	    e.preventDefault();
-	    console.log(this.state.auth_address);
-	    var inner_path = "data/users/" + this.state.auth_address + "/data.json";
-	    _zeroframe2.default.cmd("fileGet", { "inner_path": inner_path, "required": false }, function (data) {
-	      if (data) {
-	        data = JSON.parse(data);
-	      } else {
-	        data = { "message": [] };
-	      }
-	      data.message.push({
-	        "body": _this.state.text,
-	        "date_added": new Date()
-	      });
-	      var json_raw = unescape(encodeURIComponent(JSON.stringify(data, undefined, '\t')));
-	      _zeroframe2.default.cmd("fileWrite", [inner_path, btoa(json_raw)], function (res) {
-	        if (res == "ok") {
-	          console.log('ok');
-	        } else {
-	          _zeroframe2.default.cmd("wrapperNotification", ["error", "File write error:" + res]);
-	        }
-	      });
-	    });
-	  },
-	
-	  render: function render() {
-	    var form, messageArr;
-	    if (this.state.auth) {
-	      form = _react2.default.createElement(
-	        'form',
-	        { onSubmit: this.handleSubmit },
-	        _react2.default.createElement(
-	          'h4',
-	          null,
-	          'Glad to meet you ',
-	          this.state.auth
-	        ),
-	        _react2.default.createElement(
-	          'fieldset',
-	          { className: 'form-group' },
-	          _react2.default.createElement(
-	            'label',
-	            { htmlFor: 'message' },
-	            'Your message'
-	          ),
-	          _react2.default.createElement('textarea', {
-	            id: 'message',
-	            type: 'text',
-	            className: 'form-control',
-	            value: this.state.text,
-	            onChange: this.handleTextChange })
-	        ),
-	        _react2.default.createElement(
-	          'button',
-	          { type: 'submit', className: 'btn btn-primary' },
-	          'Submit'
-	        )
-	      );
-	    } else {
-	      form = _react2.default.createElement(
-	        'p',
-	        null,
-	        'Too bad you need to be auth to post a message.',
-	        _react2.default.createElement('br', null),
-	        _react2.default.createElement(
-	          'button',
-	          { type: 'button', className: 'btn btn-primary', onClick: this.handleClick },
-	          'Select user'
-	        )
-	      );
-	    }
-	
-	    messageArr = this.state.messages.map(function (message) {
-	      return _react2.default.createElement(
-	        'li',
-	        null,
-	        message.body
-	      );
-	    });
-	
-	    return _react2.default.createElement(
-	      'article',
-	      null,
-	      _react2.default.createElement(
-	        'h1',
-	        null,
-	        'Leave me a message'
-	      ),
-	      _react2.default.createElement(
-	        'p',
-	        null,
-	        'Tell me what you think of it !'
-	      ),
-	      form,
-	      _react2.default.createElement(
-	        'ul',
-	        null,
-	        messageArr
-	      )
-	    );
-	  }
-	});
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	// import ZeroFrame module
 	
 	
+	var Messages = function (_Component) {
+	  _inherits(Messages, _Component);
+	
+	  function Messages(props, context) {
+	    _classCallCheck(this, Messages);
+	
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Messages).call(this, props, context));
+	
+	    console.log(props);
+	    _this.updateUser = _this.updateUser.bind(_this);
+	    _this.updateMessages = _this.updateMessages.bind(_this);
+	    _this.handleTextChange = _this.handleTextChange.bind(_this);
+	    _this.state = {
+	      auth: false,
+	      auth_address: null,
+	      messages: []
+	    };
+	    return _this;
+	  }
+	
+	  _createClass(Messages, [{
+	    key: 'updateUser',
+	    value: function updateUser(e) {
+	      console.log(e.data);
+	      if (e.data.params) {
+	        this.setState({ auth: e.data.params.cert_user_id, auth_address: e.data.params.auth_address });
+	      } else if (e.data.result) {
+	        if (e.data.result.cert_user_id !== undefined) {
+	          this.setState({ auth: e.data.result.cert_user_id, auth_address: e.data.result.auth_address });
+	        }
+	      }
+	    }
+	  }, {
+	    key: 'updateMessages',
+	    value: function updateMessages(messages) {
+	      this.setState({ messages: messages });
+	    }
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      window.addEventListener("message", this.updateUser, false);
+	      _zeroframe2.default.cmd("siteInfo", {}, function (data) {
+	        console.log(data);
+	      });
+	      _zeroframe2.default.cmd("dbQuery", ["SELECT * FROM message ORDER BY date_added"], this.updateMessages);
+	    }
+	  }, {
+	    key: 'handleClick',
+	    value: function handleClick() {
+	      _zeroframe2.default.cmd("certSelect", [["zeroid.bit"]], null);
+	    }
+	  }, {
+	    key: 'handleTextChange',
+	    value: function handleTextChange(e) {
+	      this.setState({ text: e.target.value });
+	    }
+	  }, {
+	    key: 'handleSubmit',
+	    value: function handleSubmit(e) {
+	      var _this2 = this;
+	
+	      e.preventDefault();
+	      console.log(this.state.auth_address);
+	      var inner_path = "data/users/" + this.state.auth_address + "/data.json";
+	      _zeroframe2.default.cmd("fileGet", { "inner_path": inner_path, "required": false }, function (data) {
+	        if (data) {
+	          data = JSON.parse(data);
+	        } else {
+	          data = { "message": [] };
+	        }
+	        data.message.push({
+	          "body": _this2.state.text,
+	          "date_added": new Date()
+	        });
+	        var json_raw = unescape(encodeURIComponent(JSON.stringify(data, undefined, '\t')));
+	        _zeroframe2.default.cmd("fileWrite", [inner_path, btoa(json_raw)], function (res) {
+	          if (res == "ok") {
+	            console.log('ok');
+	          } else {
+	            _zeroframe2.default.cmd("wrapperNotification", ["error", "File write error:" + res]);
+	          }
+	        });
+	      });
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var form, messageArr;
+	      if (this.state.auth) {
+	        form = _react2.default.createElement(
+	          'form',
+	          { onSubmit: this.handleSubmit },
+	          _react2.default.createElement(
+	            'h4',
+	            null,
+	            'Glad to meet you ',
+	            this.state.auth
+	          ),
+	          _react2.default.createElement(
+	            'fieldset',
+	            { className: 'form-group' },
+	            _react2.default.createElement(
+	              'label',
+	              { htmlFor: 'message' },
+	              'Your message'
+	            ),
+	            _react2.default.createElement('textarea', {
+	              id: 'message',
+	              type: 'text',
+	              className: 'form-control',
+	              value: this.state.text,
+	              onChange: this.handleTextChange })
+	          ),
+	          _react2.default.createElement(
+	            'button',
+	            { type: 'submit', className: 'btn btn-primary' },
+	            'Submit'
+	          )
+	        );
+	      } else {
+	        form = _react2.default.createElement(
+	          'p',
+	          null,
+	          'Too bad you need to be auth to post a message.',
+	          _react2.default.createElement('br', null),
+	          _react2.default.createElement(
+	            'button',
+	            { type: 'button', className: 'btn btn-primary', onClick: this.handleClick },
+	            'Select user'
+	          )
+	        );
+	      }
+	
+	      messageArr = this.state.messages.map(function (message) {
+	        return _react2.default.createElement(
+	          'li',
+	          null,
+	          message.body
+	        );
+	      });
+	
+	      return _react2.default.createElement(
+	        'article',
+	        null,
+	        _react2.default.createElement(
+	          'h1',
+	          null,
+	          'Leave me a message'
+	        ),
+	        _react2.default.createElement(
+	          'p',
+	          null,
+	          'Tell me what you think of it !'
+	        ),
+	        form,
+	        _react2.default.createElement(
+	          'ul',
+	          null,
+	          messageArr
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return Messages;
+	}(_react.Component);
+	
 	exports.default = Messages;
+	;
 
 /***/ },
 /* 244 */
@@ -26813,19 +26863,66 @@
 	  value: true
 	});
 	
+	var _redux = __webpack_require__(167);
+	
 	var _reducer = __webpack_require__(246);
 	
-	Object.defineProperty(exports, 'reducer', {
-	  enumerable: true,
-	  get: function get() {
-	    return _interopRequireDefault(_reducer).default;
-	  }
-	});
-
+	var _reducer2 = _interopRequireDefault(_reducer);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/**
+	 * combineReducers is important to understand. As your app might grow in size
+	 * and complexity, you will likely begin to split your reducers into separate
+	 * functions - with each one managing a separate slice of the state! This helper
+	 * function from 'redux' simply merges the reducers. Keep in mind we are using
+	 * the ES6 shorthand for property notation.
+	 *
+	 * If you're transitioning from Flux, you will notice we only use one store, but
+	 * instead of relying on multiple stores to manage diff parts of the state, we use
+	 * various reducers and combine them.
+	 *
+	 * More info: http://rackt.org/redux/docs/api/combineReducers.html
+	 */
+	var rootReducer = (0, _redux.combineReducers)({
+	  reducer: _reducer2.default });
+	
+	exports.default = rootReducer;
 
 /***/ },
 /* 246 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = reducer;
+	
+	var _ActionTypes = __webpack_require__(247);
+	
+	function reducer() {
+	  var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	  var action = arguments[1];
+	
+	
+	  window.addEventListener("message", function (data) {
+	    if (data.data) {
+	      //console.log(data);
+	    }
+	  }, false);
+	
+	  switch (action.type) {
+	    case _ActionTypes.SITE_INFO:
+	      return state;
+	    default:
+	      return state;
+	  }
+	}
+
+/***/ },
+/* 247 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -26833,15 +26930,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.default = reducer;
-	function reducer() {
-	  var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-	  var action = arguments[1];
-	
-	  console.log('Reducer was called');
-	
-	  return state;
-	}
+	var SITE_INFO = exports.SITE_INFO = 'SITE_INFO';
 
 /***/ }
 /******/ ]);

@@ -1,20 +1,24 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import React, { Component } from 'react';
 
 // import ZeroFrame module
 import ZeroFrame from '../zeroframe/zeroframe';
 
 
-const Messages = React.createClass({
-  getInitialState: function() {
-    return {
+export default class Messages extends Component {
+  constructor(props, context) {
+    super(props, context);
+    console.log(props);
+    this.updateUser = this.updateUser.bind(this);
+    this.updateMessages = this.updateMessages.bind(this);
+    this.handleTextChange = this.handleTextChange.bind(this);
+    this.state = {
       auth: false,
       auth_address: null,
       messages: []
     };
-  },
+  }
 
-  updateUser: function(e) {
+  updateUser(e) {
     console.log(e.data);
     if (e.data.params) {
       this.setState({auth: e.data.params.cert_user_id, auth_address: e.data.params.auth_address});
@@ -23,29 +27,29 @@ const Messages = React.createClass({
         this.setState({auth: e.data.result.cert_user_id, auth_address: e.data.result.auth_address});
       }
     }
-  },
+  }
 
-  updateMessages: function(messages) {
+  updateMessages(messages) {
     this.setState({messages: messages});
-  },
+  }
 
-  componentDidMount: function() {
+  componentDidMount() {
    window.addEventListener("message", this.updateUser, false);
    ZeroFrame.cmd("siteInfo", {}, function(data) {
      console.log(data);
    });
    ZeroFrame.cmd("dbQuery", ["SELECT * FROM message ORDER BY date_added"], this.updateMessages);
-  },
+  }
 
-  handleClick: function() {
+  handleClick() {
     ZeroFrame.cmd("certSelect", [["zeroid.bit"]], null);
-  },
+  }
 
-  handleTextChange: function(e) {
+  handleTextChange(e) {
     this.setState({text: e.target.value});
-  },
+  }
 
-  handleSubmit: function(e) {
+  handleSubmit(e) {
     e.preventDefault();
     console.log(this.state.auth_address);
     var inner_path = "data/users/"+ this.state.auth_address +"/data.json";
@@ -53,7 +57,7 @@ const Messages = React.createClass({
       if (data) {
         data = JSON.parse(data);
       } else {
-        data = { "message": [] }
+        data = { "message": [] };
       }
       data.message.push({
           "body": this.state.text,
@@ -68,9 +72,9 @@ const Messages = React.createClass({
         }
       });
     });
-  },
+  }
 
-  render: function() {
+  render() {
     var form, messageArr;
     if (this.state.auth) {
       form =  <form onSubmit={this.handleSubmit}>
@@ -110,6 +114,4 @@ const Messages = React.createClass({
       </article>
     );
   }
-});
-
-export default Messages;
+};

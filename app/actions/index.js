@@ -1,8 +1,7 @@
 import * as types from '../constants/ActionTypes';
 
-export function changeUser(name) {
+export function siteInfo() {
   return {
-    type: types.ADD_FRIEND,
-    name
+    type: types.SITE_INFO
   };
 }

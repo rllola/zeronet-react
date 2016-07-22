@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Link } from 'react-router';
 
-const MainLayout = React.createClass({
-  render: function() {
+export default class MainLayout extends Component {
+  render() {
+    console.log(this.props);
     return (
       <div className="app">
         <nav className="navbar navbar-light bg-faded" id="CollapsingNavbar">
@@ -33,6 +34,4 @@ const MainLayout = React.createClass({
       </div>
     );
   }
-});
-
-export default MainLayout;
+};

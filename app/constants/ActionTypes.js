@@ -1,1 +1,1 @@
-export const CHANGE_USER = 'CHANGE_USER';
+export const SITE_INFO = 'SITE_INFO';
