@@ -1,3 +1,4 @@
+import Constants from './util/constants';
 import React from 'react';
 import { Router, Route, browserHistory, IndexRoute } from 'react-router';
 
@@ -10,11 +11,10 @@ import Tutorial from './components/tutorial';
 import AboutMe from './components/about-me';
 import Messages from './components/messages';
 
-
 export default (
   <Router history={browserHistory}>
     <Route component={MainLayout}>
-      <Route path="/1JfWHNDQeR71Uf8EtyRqCNJ1Ked5t1pukk/" component={Home} />
+      <Route path={`/${Constants.APP_ID}`} component={Home} />
 
       <Route path="tutorial" component={Tutorial} />
 
