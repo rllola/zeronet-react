@@ -22,6 +22,8 @@ export default (
 
       <Route path="messages" component={Messages} />
 
+      <Route from="*" to="{`/${Constants.APP_ID}`}" />
+
     </Route>
   </Router>
 );
