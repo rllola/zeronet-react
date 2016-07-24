@@ -1,4 +1,5 @@
 import React from 'react';
+import Constants from '../util/constants';
 import { Link } from 'react-router';
 
 const MainLayout = React.createClass({
@@ -10,10 +11,10 @@ const MainLayout = React.createClass({
             &#9776;
           </button>
           <div className="collapse navbar-toggleable-xs">
-            <Link to="1JfWHNDQeR71Uf8EtyRqCNJ1Ked5t1pukk/" className="navbar-brand" >Zereact</Link>
+            <Link to={`${Constants.APP_ID}`} className="navbar-brand" >Zereact</Link>
             <ul className="nav navbar-nav">
               <li className="nav-item active">
-                <Link to="1JfWHNDQeR71Uf8EtyRqCNJ1Ked5t1pukk/" className="nav-link" >Home <span className="sr-only">(current)</span></Link>
+                <Link to={`${Constants.APP_ID}`} className="nav-link" >Home <span className="sr-only">(current)</span></Link>
               </li>
               <li className="nav-item">
                 <Link to="tutorial" className="nav-link">Tutorial</Link>
