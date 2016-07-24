@@ -5,14 +5,14 @@ import ZeroFrame from './zeroframe';
 var LocalStorage = (function() {
   this.storage = {};
 
-  window.sessionStorage.removeItem = function(key) {
+  window.emuStorage = {};
+  window.emuStorage.removeItem = function(key) {
     this.storage[key] = undefined;
     this.saveSession();
-  };
-  window.sessionStorage.setItem = function(key, value) {
-    this.storage[key]= value;
-    this.saveSession();
-  };
+  }.bind(this);
+  window.emuStorage.getItem = function(key) {
+    return this.storage[key];
+  }.bind(this);
 
   this.saveSession = function() {
     ZeroFrame.cmd("wrapperSetstorage", this.storage);
