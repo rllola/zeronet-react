@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
 
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import * as ZeroFrameActions from '../actions';
+
 // import ZeroFrame module
 import ZeroFrame from '../zeroframe/zeroframe';
 
 
-export default class Messages extends Component {
+class Messages extends Component {
   constructor(props, context) {
     super(props, context);
-    console.log(props);
     this.updateUser = this.updateUser.bind(this);
     this.updateMessages = this.updateMessages.bind(this);
     this.handleTextChange = this.handleTextChange.bind(this);
@@ -35,9 +38,10 @@ export default class Messages extends Component {
 
   componentDidMount() {
    window.addEventListener("message", this.updateUser, false);
-   ZeroFrame.cmd("siteInfo", {}, function(data) {
+   console.log(this.props.actions.siteInfo());
+   /*ZeroFrame.cmd("siteInfo", {}, function(data) {
      console.log(data);
-   });
+   });*/
    ZeroFrame.cmd("dbQuery", ["SELECT * FROM message ORDER BY date_added"], this.updateMessages);
   }
 
@@ -115,3 +119,21 @@ export default class Messages extends Component {
     );
   }
 };
+
+
+function mapStateToProps(state) {
+  return {
+    info: state.info
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators(ZeroFrameActions, dispatch)
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Messages);;

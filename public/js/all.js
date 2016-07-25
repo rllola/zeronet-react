@@ -60,7 +60,7 @@
 	
 	var _router2 = _interopRequireDefault(_router);
 	
-	var _reducers = __webpack_require__(245);
+	var _reducers = __webpack_require__(247);
 	
 	var _reducers2 = _interopRequireDefault(_reducers);
 	
@@ -21236,19 +21236,19 @@
 	
 	var _main2 = _interopRequireDefault(_main);
 	
-	var _home = __webpack_require__(240);
+	var _home = __webpack_require__(242);
 	
 	var _home2 = _interopRequireDefault(_home);
 	
-	var _tutorial = __webpack_require__(241);
+	var _tutorial = __webpack_require__(243);
 	
 	var _tutorial2 = _interopRequireDefault(_tutorial);
 	
-	var _aboutMe = __webpack_require__(242);
+	var _aboutMe = __webpack_require__(244);
 	
 	var _aboutMe2 = _interopRequireDefault(_aboutMe);
 	
-	var _messages = __webpack_require__(243);
+	var _messages = __webpack_require__(245);
 	
 	var _messages2 = _interopRequireDefault(_messages);
 	
@@ -26310,6 +26310,16 @@
 	
 	var _reactRouter = __webpack_require__(183);
 	
+	var _redux = __webpack_require__(167);
+	
+	var _reactRedux = __webpack_require__(159);
+	
+	var _actions = __webpack_require__(240);
+	
+	var ZeroFrameActions = _interopRequireWildcard(_actions);
+	
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -26321,16 +26331,33 @@
 	var MainLayout = function (_Component) {
 	  _inherits(MainLayout, _Component);
 	
-	  function MainLayout() {
+	  function MainLayout(props) {
 	    _classCallCheck(this, MainLayout);
 	
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(MainLayout).apply(this, arguments));
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(MainLayout).call(this, props));
+	
+	    _this.props.handleUpdateSiteInfo.bind(_this);
+	    return _this;
 	  }
 	
 	  _createClass(MainLayout, [{
+	    key: 'handleUpdateSiteInfo',
+	    value: function handleUpdateSiteInfo() {
+	      console.log(this.props.actions);
+	    }
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      window.addEventListener('message', this.handleUpdateSiteInfo);
+	    }
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      window.removeEventListener('message', this.handleUpdateSiteInfo);
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
-	      console.log(this.props);
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'app' },
@@ -26348,7 +26375,7 @@
 	            _react2.default.createElement(
 	              _reactRouter.Link,
 	              { to: '1JfWHNDQeR71Uf8EtyRqCNJ1Ked5t1pukk/', className: 'navbar-brand' },
-	              'Zereact'
+	              'Zeronet-React'
 	            ),
 	            _react2.default.createElement(
 	              'ul',
@@ -26409,11 +26436,56 @@
 	  return MainLayout;
 	}(_react.Component);
 	
-	exports.default = MainLayout;
-	;
+	function mapStateToProps(state) {
+	  return {
+	    info: state.info
+	  };
+	}
+	
+	function mapDispatchToProps(dispatch) {
+	  return {
+	    actions: (0, _redux.bindActionCreators)(ZeroFrameActions, dispatch)
+	  };
+	}
+	
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(MainLayout);
 
 /***/ },
 /* 240 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.siteInfo = siteInfo;
+	
+	var _ActionTypes = __webpack_require__(241);
+	
+	var types = _interopRequireWildcard(_ActionTypes);
+	
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+	
+	function siteInfo() {
+	  return {
+	    type: types.SITE_INFO
+	  };
+	}
+
+/***/ },
+/* 241 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var SITE_INFO = exports.SITE_INFO = 'SITE_INFO';
+
+/***/ },
+/* 242 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -26457,7 +26529,7 @@
 	exports.default = Home;
 
 /***/ },
-/* 241 */
+/* 243 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -26496,7 +26568,7 @@
 	exports.default = Tutorial;
 
 /***/ },
-/* 242 */
+/* 244 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -26535,7 +26607,7 @@
 	exports.default = AboutMe;
 
 /***/ },
-/* 243 */
+/* 245 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -26550,9 +26622,19 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _zeroframe = __webpack_require__(244);
+	var _redux = __webpack_require__(167);
+	
+	var _reactRedux = __webpack_require__(159);
+	
+	var _actions = __webpack_require__(240);
+	
+	var ZeroFrameActions = _interopRequireWildcard(_actions);
+	
+	var _zeroframe = __webpack_require__(246);
 	
 	var _zeroframe2 = _interopRequireDefault(_zeroframe);
+	
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -26573,7 +26655,6 @@
 	
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Messages).call(this, props, context));
 	
-	    console.log(props);
 	    _this.updateUser = _this.updateUser.bind(_this);
 	    _this.updateMessages = _this.updateMessages.bind(_this);
 	    _this.handleTextChange = _this.handleTextChange.bind(_this);
@@ -26606,9 +26687,10 @@
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
 	      window.addEventListener("message", this.updateUser, false);
-	      _zeroframe2.default.cmd("siteInfo", {}, function (data) {
+	      console.log(this.props.actions.siteInfo());
+	      /*ZeroFrame.cmd("siteInfo", {}, function(data) {
 	        console.log(data);
-	      });
+	      });*/
 	      _zeroframe2.default.cmd("dbQuery", ["SELECT * FROM message ORDER BY date_added"], this.updateMessages);
 	    }
 	  }, {
@@ -26732,11 +26814,25 @@
 	  return Messages;
 	}(_react.Component);
 	
-	exports.default = Messages;
+	;
+	
+	function mapStateToProps(state) {
+	  return {
+	    info: state.info
+	  };
+	}
+	
+	function mapDispatchToProps(dispatch) {
+	  return {
+	    actions: (0, _redux.bindActionCreators)(ZeroFrameActions, dispatch)
+	  };
+	}
+	
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Messages);
 	;
 
 /***/ },
-/* 244 */
+/* 246 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -26854,7 +26950,7 @@
 	module.exports = new ZeroFrame();
 
 /***/ },
-/* 245 */
+/* 247 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -26865,53 +26961,35 @@
 	
 	var _redux = __webpack_require__(167);
 	
-	var _reducer = __webpack_require__(246);
+	var _reducer = __webpack_require__(248);
 	
 	var _reducer2 = _interopRequireDefault(_reducer);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	/**
-	 * combineReducers is important to understand. As your app might grow in size
-	 * and complexity, you will likely begin to split your reducers into separate
-	 * functions - with each one managing a separate slice of the state! This helper
-	 * function from 'redux' simply merges the reducers. Keep in mind we are using
-	 * the ES6 shorthand for property notation.
-	 *
-	 * If you're transitioning from Flux, you will notice we only use one store, but
-	 * instead of relying on multiple stores to manage diff parts of the state, we use
-	 * various reducers and combine them.
-	 *
-	 * More info: http://rackt.org/redux/docs/api/combineReducers.html
-	 */
 	var rootReducer = (0, _redux.combineReducers)({
-	  reducer: _reducer2.default });
+	  reducer: _reducer2.default
+	});
 	
 	exports.default = rootReducer;
 
 /***/ },
-/* 246 */
+/* 248 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
 	exports.default = reducer;
 	
-	var _ActionTypes = __webpack_require__(247);
+	var _ActionTypes = __webpack_require__(241);
 	
 	function reducer() {
 	  var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 	  var action = arguments[1];
 	
-	
-	  window.addEventListener("message", function (data) {
-	    if (data.data) {
-	      //console.log(data);
-	    }
-	  }, false);
 	
 	  switch (action.type) {
 	    case _ActionTypes.SITE_INFO:
@@ -26920,17 +26998,6 @@
 	      return state;
 	  }
 	}
-
-/***/ },
-/* 247 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	var SITE_INFO = exports.SITE_INFO = 'SITE_INFO';
 
 /***/ }
 /******/ ]);
