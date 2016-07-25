@@ -1,5 +1,7 @@
 # ZeroNet/React starter kit
 
+[![Join the chat at https://gitter.im/rllola/zeronet-react](https://badges.gitter.im/rllola/zeronet-react.svg)](https://gitter.im/rllola/zeronet-react?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 This is an attempt to simplify ZeroNet website creation for react developer. So we can do more cool things !
 
 Note: I am not a react developer. I am discovering the library while starting this project. Feel free to improve the react code.
