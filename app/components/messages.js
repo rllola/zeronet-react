@@ -1,8 +1,7 @@
 import React from 'react';
 
 // import ZeroFrame module
-import ZeroFrame from '../zeroframe/zeroframe';
-
+import ZeroFrame from '../util/zeroframe';
 
 const Messages = React.createClass({
   getInitialState: function() {
