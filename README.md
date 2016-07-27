@@ -1,5 +1,7 @@
 # ZeroNet/React starter kit
 
+[![Join the chat at https://gitter.im/rllola/zeronet-react](https://badges.gitter.im/rllola/zeronet-react.svg)](https://gitter.im/rllola/zeronet-react?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 This is an attempt to simplify ZeroNet website creation for react developer. So we can do more cool things !
 
 Note: I am not a react developer. I am discovering the library while starting this project. Feel free to improve the react code.
@@ -53,9 +55,11 @@ Because in the url we have the adress of website we need to change the url base 
 
 Change the address in `app/router.js` for the one of your website.
 
-## browserHistory
+## Local Storage
 
 ```
 Warning: [history] Unable to save state; sessionStorage is not available due to security settings
 ```
-No idea how to fix this.
+
+This bug comes from a [react-router](https://github.com/reactjs/react-router) dependency [ReactTraining/history](https://github.com/ReactTraining/history) trying to access the sessionStorage.
+The only way I can currently think to fix this is to fork the repository and map it through a different namespace as Chrome currently bans anything to do with sessionStorage; even the attempt to override it.
