@@ -1,5 +1,3 @@
-import { wrapperOpenedWebsocket, SITE_INFO } from '../constants/ActionTypes';
-
 const initialState = {
   url: null,
   waiting_cb: {},
@@ -8,20 +6,21 @@ const initialState = {
 };
 
 const cmd = () => {
-  
+  console.log("Create a command");
 };
 
 export default function zeroframe(state=initialState, action) {
 
   switch (action.type) {
-    case wrapperOpenedWebsocket:
+    case 'wrapperOpenedWebsocket':
       console.log("[ZeroFrame] Websocket open");
       return state;
-    case wrapperReady:
-      console.log();
+    case 'wrapperReady':
+      console.log("[ZeroFrame] wrapperReady");
       return state;
-    case SITE_INFO:
-	    return Object.assign({}, state, action.info.result);
+    case 'response':
+      console.log("[ZeroFrame] response :", action);
+	    return Object.assign({}, state, action.response.result);
     default:
       return state;
   }

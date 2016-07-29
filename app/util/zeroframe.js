@@ -30,6 +30,8 @@ ZeroFrame = (function() {
     var cmd, message;
     message = e.data;
     cmd = message.cmd;
+    console.log(e);
+    console.log(message);
     if (cmd === "response") {
       if (this.waiting_cb[message.to] != null) {
         return this.waiting_cb[message.to](message.result);
@@ -54,6 +56,7 @@ ZeroFrame = (function() {
   };
 
   ZeroFrame.prototype.response = function(to, result) {
+    console.log(to);
     return this.send({
       "cmd": "response",
       "to": to,
@@ -105,4 +108,4 @@ ZeroFrame = (function() {
 
 })();
 
-module.exports = new ZeroFrame();
+module.exports = new ZeroFrame;

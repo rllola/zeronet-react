@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
-
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import * as ZeroFrameActions from '../actions';
-
+import ZeroFrame from '../util/zeroframe'
 
 class Messages extends Component {
   componentDidMount() {
+    ZeroFrame.cmd("certSelect", [["zeroid.bit"]], this.updateUser);
+    ZeroFrame.cmd("ping");
     console.log(this.props);
+  }
+
+  updateUser(data) {
+    console.log(data);
+    console.log('Update User');
   }
 
   render() {
@@ -23,13 +27,6 @@ function mapStateToProps(state) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    actions: bindActionCreators(ZeroFrameActions, dispatch)
-  };
-}
-
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+  mapStateToProps
 )(Messages);

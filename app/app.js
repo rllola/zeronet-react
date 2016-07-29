@@ -5,7 +5,6 @@ import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import LocalStorage from './util/localstorage.js';
-import { siteInfo } from './actions';
 
 import Router from './router';
 import rootReducer from './reducers';
@@ -13,25 +12,24 @@ import rootReducer from './reducers';
 //Create store
 let store = createStore(rootReducer);
 
-// Listen to fucking message from window
+// Listener for zeronet message
 window.addEventListener('message', (data) => {
-  console.log(data);
-  //store.dispatch(siteInfo(data.data));
+  var response = data.data;
+
+  // Dispatch the cmd as the action type.
   store.dispatch({
-    type: data.data.cmd,
-    data.data.result
+    type: response.cmd,
+    response
   });
 });
 
-//postMessage to initialize fucking value (Not sure needed here)
-let message = {
-    "cmd": "siteInfo",
-    "params": {},
-    "wrapper_nonce": document.location.href.replace(/.*wrapper_nonce=([A-Za-z0-9]+).*/, "$1"),
-    "id": 0,
-    "next_message_id": 1
+ZeroFrame.cmd("siteInfo", {}, (data)=> {
+  console.log(data);
+});
+
+ZeroFrame.route = function(cmd, message) {
+  return this.log("Fucking Update store here !", message);
 };
-window.parent.postMessage(message, "*");
 
 // Now we can attach the router to the 'root' element like this:
 render(
