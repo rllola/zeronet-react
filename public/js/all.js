@@ -27214,7 +27214,6 @@
 	
 	  switch (action.type) {
 	    case _constants.UPDATE_MESSAGES:
-	      var result = Object.assign([], state, action.messages);
 	      return Object.assign([], state, action.messages);
 	    default:
 	      return state;
