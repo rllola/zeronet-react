@@ -26980,7 +26980,6 @@
 	      var _this3 = this;
 	
 	      e.preventDefault();
-	      console.log(this.props.site.auth_address);
 	      var inner_path = "data/users/" + this.props.site.auth_address + "/data.json";
 	      _zeroframe2.default.cmd("fileGet", { "inner_path": inner_path, "required": false }, function (data) {
 	        if (data) {
@@ -27215,10 +27214,8 @@
 	
 	  switch (action.type) {
 	    case _constants.UPDATE_MESSAGES:
-	      console.log(action.messages);
 	      var result = Object.assign([], state, action.messages);
-	      console.log(result);
-	      return result;
+	      return Object.assign([], state, action.messages);
 	    default:
 	      return state;
 	  }

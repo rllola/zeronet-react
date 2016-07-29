@@ -28,7 +28,6 @@ class Messages extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    console.log(this.props.site.auth_address);
     var inner_path = "data/users/"+ this.props.site.auth_address +"/data.json";
     ZeroFrame.cmd("fileGet", {"inner_path": inner_path, "required": false}, (data) => {
       if (data) {
