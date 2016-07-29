@@ -21,7 +21,6 @@ window.addEventListener('message', (data) => {
     type: data.data.cmd,
     data.data.result
   });
-  console.log(store.getState());
 });
 
 //postMessage to initialize fucking value (Not sure needed here)

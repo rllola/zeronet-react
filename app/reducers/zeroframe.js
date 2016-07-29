@@ -7,11 +7,18 @@ const initialState = {
   next_message_id: 1
 };
 
+const cmd = () => {
+  
+};
+
 export default function zeroframe(state=initialState, action) {
 
   switch (action.type) {
     case wrapperOpenedWebsocket:
       console.log("[ZeroFrame] Websocket open");
+      return state;
+    case wrapperReady:
+      console.log();
       return state;
     case SITE_INFO:
 	    return Object.assign({}, state, action.info.result);
