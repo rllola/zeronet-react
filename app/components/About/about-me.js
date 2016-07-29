@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { Component } from 'react';
 
-const AboutMe = React.createClass({
-  render: function() {
+class AboutMe extends Component {
+  render() {
     return (
       <article>
         <h1>About Me</h1>
@@ -11,6 +11,6 @@ const AboutMe = React.createClass({
       </article>
     );
   }
-});
+};
 
 export default AboutMe;

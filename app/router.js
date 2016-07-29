@@ -6,10 +6,10 @@ import { Router, Route, browserHistory, IndexRoute } from 'react-router';
 import MainLayout from './components/main.layout';
 
 // Pages
-import Home from './components/home';
-import Tutorial from './components/tutorial';
-import AboutMe from './components/about-me';
-import Messages from './components/messages';
+import Home from './components/Home/home';
+import Tutorial from './components/Tutorial/tutorial';
+import AboutMe from './components/About/about-me';
+import Messages from './components/Messages/messages';
 
 export default (
   <Router history={browserHistory}>

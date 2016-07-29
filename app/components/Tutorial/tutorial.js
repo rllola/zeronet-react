@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { Component } from 'react';
 
-const Tutorial = React.createClass({
-  render: function() {
+class Tutorial extends Component {
+  render() {
     return (
       <article>
         <h1>Tutorial</h1>
@@ -11,6 +11,6 @@ const Tutorial = React.createClass({
       </article>
     );
   }
-});
+};
 
 export default Tutorial;

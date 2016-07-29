@@ -1,9 +1,11 @@
 import { combineReducers } from 'redux';
-import zeroframe from './zeroframe';
+import site from './site/reducer';
+import messages from './messages/reducer';
 
 
 const rootReducer = combineReducers({
-  zeroframe
+  messages,
+  site
 });
 
 export default rootReducer;

@@ -5,6 +5,7 @@ import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import LocalStorage from './util/localstorage.js';
+import { updateInfo } from './site/actions';
 
 import Router from './router';
 import rootReducer from './reducers';
@@ -12,24 +13,10 @@ import rootReducer from './reducers';
 //Create store
 let store = createStore(rootReducer);
 
-// Listener for zeronet message
-window.addEventListener('message', (data) => {
-  var response = data.data;
-
-  // Dispatch the cmd as the action type.
-  store.dispatch({
-    type: response.cmd,
-    response
-  });
+// Update store with data site info.
+ZeroFrame.cmd("siteInfo", {}, (info)=> {
+  store.dispatch(updateInfo(info));
 });
-
-ZeroFrame.cmd("siteInfo", {}, (data)=> {
-  console.log(data);
-});
-
-ZeroFrame.route = function(cmd, message) {
-  return this.log("Fucking Update store here !", message);
-};
 
 // Now we can attach the router to the 'root' element like this:
 render(
@@ -38,6 +25,12 @@ render(
   </Provider>,
   document.getElementById('root')
 );
+
+ZeroFrame.route = function(cmd, message) {
+  let info = message.params;
+  store.dispatch(updateInfo(info));
+  return ZeroFrame.log("Store updated with");
+};
 
 window.history.pushState = function(state, title, url) {
   var relative_url = url.split(Constants.APP_ID).pop();
