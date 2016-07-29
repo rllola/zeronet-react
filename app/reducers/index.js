@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
-import reducer from './reducer';
+import zeroframe from './zeroframe';
 
 
 const rootReducer = combineReducers({
-  reducer
+  zeroframe
 });
 
 export default rootReducer;

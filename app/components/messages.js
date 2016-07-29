@@ -18,9 +18,8 @@ class Messages extends Component {
 
 
 function mapStateToProps(state) {
-  console.log(state);
   return {
-    info: state.reducer
+    info: state.zeroframe
   };
 }
 

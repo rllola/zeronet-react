@@ -15,7 +15,12 @@ let store = createStore(rootReducer);
 
 // Listen to fucking message from window
 window.addEventListener('message', (data) => {
-  store.dispatch(siteInfo(data.data));
+  console.log(data);
+  //store.dispatch(siteInfo(data.data));
+  store.dispatch({
+    type: data.data.cmd,
+    data.data.result
+  });
   console.log(store.getState());
 });
 
