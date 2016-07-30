@@ -43,6 +43,9 @@ class Messages extends Component {
       ZeroFrame.cmd("fileWrite", [inner_path, btoa(json_raw)], (res) => {
         if (res == "ok") {
           console.log('ok');
+          ZeroFrame.cmd("sitePublish", {"inner_path": inner_path}, (res) => {
+            console.log(res);
+          });
           ZeroFrame.cmd("dbQuery", ["SELECT * FROM message ORDER BY date_added"], (data) => {
             this.props.actions.updateMessages(data);
           });
