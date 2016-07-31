@@ -49,12 +49,6 @@ This API is not only for database queries. See documentation for more informatio
 
 # NOTES
 
-## Router
-
-Because in the url we have the adress of website we need to change the url base so it doesnt interfer with react-router.
-
-Change the address in `app/router.js` for the one of your website.
-
 ## Local Storage
 
 ```
