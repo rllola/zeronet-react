@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import ZeroFrame from '../../util/zeroframe';
+import ZeroFrame from 'zeroframe';
 import { bindActionCreators } from 'redux';
 import * as messagesActions from '../../messages/actions';
 
 class Messages extends Component {
   constructor(props) {
     super(props);
+
     this.handleTextChange = this.handleTextChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this)
     this.state = {};

@@ -1,5 +1,5 @@
 import Constants from './util/constants';
-import ZeroFrame from './util/zeroframe';
+import ZeroFrame from 'zeroframe';
 import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';

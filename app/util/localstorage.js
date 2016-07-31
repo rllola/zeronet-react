@@ -1,4 +1,4 @@
-import ZeroFrame from './zeroframe';
+import ZeroFrame from 'zeroframe';
 
 // unfinished.. can't get around the security error for accessing sessionStorage in a sandbox
 

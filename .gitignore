@@ -2,4 +2,4 @@ content.json
 data/
 node_modules/
 .jshintrc
-public/
+public/js/
