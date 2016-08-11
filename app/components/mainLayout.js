@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import Constants from '../util/constants';
+import { APP_ID } from '../util/constants';
 import { Link } from 'react-router';
+import { observer } from 'mobx-react';
 
-
-class MainLayout extends Component {
+@observer
+export default class MainLayout extends Component {
   render() {
     return (
       <div className="app">
@@ -12,10 +13,10 @@ class MainLayout extends Component {
             &#9776;
           </button>
           <div className="collapse navbar-toggleable-xs">
-            <Link to={`${Constants.APP_ID}`} className="navbar-brand" >Zeronet-React</Link>
+            <Link to={`${APP_ID}`} className="navbar-brand" >Zeronet-React</Link>
             <ul className="nav navbar-nav">
               <li className="nav-item active">
-                <Link to={`${Constants.APP_ID}`} className="nav-link" >Home <span className="sr-only">(current)</span></Link>
+                <Link to={`${APP_ID}`} className="nav-link" >Home <span className="sr-only">(current)</span></Link>
               </li>
               <li className="nav-item">
                 <Link to="tutorial" className="nav-link">Tutorial</Link>
@@ -36,5 +37,3 @@ class MainLayout extends Component {
     );
   }
 }
-
-export default MainLayout;
