@@ -10,7 +10,7 @@ export default class AboutMe extends Component {
   }
 
   changeName() {
-    this.context.store.global.name = 'Coda';
+    this.context.globalStore.name = 'Coda';
   }
 
   render() {
@@ -18,7 +18,7 @@ export default class AboutMe extends Component {
       <article>
         <h1>About Me</h1>
         <p>
-          My name is { this.context.store.global.name }
+          My name is { this.context.globalStore.name }
           <br /><br />
           <button onClick={this.changeName}>Change Name</button>
         </p>
@@ -28,5 +28,5 @@ export default class AboutMe extends Component {
 };
 
 AboutMe.contextTypes = {
-  store: React.PropTypes.object.isRequired
+  globalStore: React.PropTypes.object.isRequired
 };

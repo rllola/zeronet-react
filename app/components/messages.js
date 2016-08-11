@@ -15,7 +15,7 @@ export default class Messages extends Component {
 
   componentWillMount() {
     ZeroFrame.cmd("dbQuery", ["SELECT * FROM message ORDER BY date_added"], (data) => {
-      this.context.store.global.messages = data;
+      this.context.globalStore.messages = data;
     });
   }
 
@@ -29,7 +29,7 @@ export default class Messages extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    var inner_path = "data/users/"+ this.context.store.global.site.auth_address +"/data.json";
+    var inner_path = "data/users/"+ this.context.globalStore.site.auth_address +"/data.json";
     ZeroFrame.cmd("fileGet", {"inner_path": inner_path, "required": false}, (data) => {
       if (data) {
         data = JSON.parse(data);
@@ -48,7 +48,7 @@ export default class Messages extends Component {
             console.log(res);
           });
           ZeroFrame.cmd("dbQuery", ["SELECT * FROM message ORDER BY date_added"], (data) => {
-            this.context.store.global.messages = data;
+            this.context.globalStore.messages = data;
           });
         } else {
           ZeroFrame.cmd("wrapperNotification", ["error", "File write error:" + res]);
@@ -62,9 +62,9 @@ export default class Messages extends Component {
       <article>
         <h1>Leave a message</h1>
         <p>Tell me what you think of it!</p>
-        { this.context.store.global.site.cert_user_id &&
+        { this.context.globalStore.site.cert_user_id &&
           <form onSubmit={this.handleSubmit}>
-            <h4>Glad to meet you {this.context.store.global.site.cert_user_id}</h4>
+            <h4>Glad to meet you {this.context.globalStore.site.cert_user_id}</h4>
             <fieldset className="form-group">
               <label htmlFor="message">Your message</label>
               <textarea
@@ -77,7 +77,7 @@ export default class Messages extends Component {
             </fieldset>
             <button type="submit" className="btn btn-primary">Submit</button>
           </form> }
-        { !this.context.store.global.site.cert_user_id &&
+        { !this.context.globalStore.site.cert_user_id &&
           <div>
             <p>Too bad you need to be authorized to post a message</p>
             <button className="btn btn-primary" onClick={this.handleClick}>Select User</button>
@@ -85,7 +85,7 @@ export default class Messages extends Component {
         }
 
         <ul>
-          {  this.context.store.global.messages.map((message) => {
+          {  this.context.globalStore.messages.map((message) => {
                return (<li>{message.body}</li>)
              })
           }
@@ -96,7 +96,7 @@ export default class Messages extends Component {
 }
 
 Messages.contextTypes = {
-  store: React.PropTypes.object.isRequired
+  globalStore: React.PropTypes.object.isRequired
 };
 
 

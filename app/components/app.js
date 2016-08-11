@@ -4,7 +4,6 @@ import React, { Component } from 'react';
 import { Router, browserHistory, Route } from 'react-router';
 import { render } from 'react-dom';
 import LocalStorage from '../util/localstorage.js';
-import { updateInfo } from '../site/actions';
 
 //Store
 import GlobalStore from './store/global_store';
@@ -23,9 +22,7 @@ var globalStore = new GlobalStore();
 export default class App extends Component {
   getChildContext() {
     return {
-      store: {
-        global: globalStore
-      }
+      globalStore: globalStore
     };
   }
 
@@ -45,7 +42,7 @@ export default class App extends Component {
 }
 
 App.childContextTypes = {
-  store: React.PropTypes.object
+  globalStore: React.PropTypes.object
 };
 
 
