@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 
 class AboutMe extends Component {
-  render() {
+  render () {
     return (
       <article>
         <h1>About Me</h1>
@@ -9,8 +9,8 @@ class AboutMe extends Component {
           My name is Lola
         </p>
       </article>
-    );
+    )
   }
-};
+}
 
-export default AboutMe;
+export default AboutMe

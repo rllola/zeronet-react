@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 
 class Tutorial extends Component {
-  render() {
+  render () {
     return (
       <article>
         <h1>Tutorial</h1>
@@ -9,8 +9,8 @@ class Tutorial extends Component {
           README.md
         </p>
       </article>
-    );
+    )
   }
-};
+}
 
-export default Tutorial;
+export default Tutorial

@@ -1,10 +1,9 @@
-import React, { Component } from 'react';
-import Constants from '../util/constants';
-import { Link } from 'react-router';
-
+import React, { Component } from 'react'
+import content from '../../content.json'
+import { Link } from 'react-router'
 
 class MainLayout extends Component {
-  render() {
+  render () {
     return (
       <div className="app">
         <nav className="navbar navbar-light bg-faded" id="CollapsingNavbar">
@@ -12,10 +11,10 @@ class MainLayout extends Component {
             &#9776;
           </button>
           <div className="collapse navbar-toggleable-xs">
-            <Link to={`${Constants.APP_ID}`} className="navbar-brand" >Zeronet-React</Link>
+            <Link to={`${content.address}`} className="navbar-brand" >Zeronet-React</Link>
             <ul className="nav navbar-nav">
               <li className="nav-item active">
-                <Link to={`${Constants.APP_ID}`} className="nav-link" >Home <span className="sr-only">(current)</span></Link>
+                <Link to={`${content.address}`} className="nav-link" >Home <span className="sr-only">(current)</span></Link>
               </li>
               <li className="nav-item">
                 <Link to="tutorial" className="nav-link">Tutorial</Link>
@@ -33,8 +32,8 @@ class MainLayout extends Component {
           {this.props.children}
         </main>
       </div>
-    );
+    )
   }
 }
 
-export default MainLayout;
+export default MainLayout

@@ -1,8 +1,8 @@
-import * as types from './constants';
+import * as types from './constants'
 
-export function updateInfo(info) {
+export function updateInfo (info) {
   return {
     type: types.UPDATE_INFO,
     info
-  };
+  }
 }
