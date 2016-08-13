@@ -12,10 +12,8 @@
     "mobx-react": "^3.5.4",
     "react": "0.14.7",
     "react-dom": "0.14.7",
-    "react-redux": "^4.4.5",
     "react-router": "2.0.0",
-    "redux": "^3.5.2",
-    "zeroframe": "https://github.com/rllola/zeroframe.git"
+    "zeroframe": "^1.0.0"
   },
   "devDependencies": {
     "babel-cli": "^6.5.1",
