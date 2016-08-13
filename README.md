@@ -1,5 +1,7 @@
 # ZeroNet/React starter kit
 
+[![JavaScript Style Guide](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
+
 [![Join the chat at https://gitter.im/rllola/zeronet-react](https://badges.gitter.im/rllola/zeronet-react.svg)](https://gitter.im/rllola/zeronet-react?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 This is an attempt to simplify ZeroNet website creation for react developer. So we can do more cool things !

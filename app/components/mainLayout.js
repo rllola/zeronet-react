@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
-import { APP_ID } from '../util/constants';
-import { Link } from 'react-router';
-import { observer } from 'mobx-react';
+import React, { Component } from 'react'
+import { APP_ID } from '../util/constants'
+import { Link } from 'react-router'
+import { observer } from 'mobx-react'
 
 @observer
 export default class MainLayout extends Component {
-  render() {
+  render () {
     return (
       <div className="app">
         <nav className="navbar navbar-light bg-faded" id="CollapsingNavbar">
@@ -34,6 +34,6 @@ export default class MainLayout extends Component {
           {this.props.children}
         </main>
       </div>
-    );
+    )
   }
 }

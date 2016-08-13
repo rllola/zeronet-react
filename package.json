@@ -31,5 +31,13 @@
     "redux-devtools": "^3.3.1",
     "webpack": "^1.12.14",
     "webpack-stream": "^3.1.0"
+  },
+  "standard": {
+    "parser": "babel-eslint",
+    "ignore": [
+      "public/",
+      "gulpfile.js",
+      "webpack.config.js"
+    ]
   }
 }

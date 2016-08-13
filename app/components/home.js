@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import { observer } from 'mobx-react';
+import React, { Component } from 'react'
+import { observer } from 'mobx-react'
 
 @observer
 class Home extends Component {
-  render() {
+  render () {
     return (
       <article>
         <h1>This is the home page</h1>
@@ -14,8 +14,8 @@ class Home extends Component {
           Next time I will be more creative.
         </p>
       </article>
-    );
+    )
   }
-};
+}
 
-export default Home;
+export default Home

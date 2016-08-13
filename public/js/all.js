@@ -219,7 +219,6 @@
 /***/ function(module, exports) {
 
 	// shim for using process in browser
-	
 	var process = module.exports = {};
 	
 	// cached from whatever global is present so that test runners that stub it
@@ -231,21 +230,63 @@
 	var cachedClearTimeout;
 	
 	(function () {
-	  try {
-	    cachedSetTimeout = setTimeout;
-	  } catch (e) {
-	    cachedSetTimeout = function () {
-	      throw new Error('setTimeout is not defined');
+	    try {
+	        cachedSetTimeout = setTimeout;
+	    } catch (e) {
+	        cachedSetTimeout = function () {
+	            throw new Error('setTimeout is not defined');
+	        }
 	    }
-	  }
-	  try {
-	    cachedClearTimeout = clearTimeout;
-	  } catch (e) {
-	    cachedClearTimeout = function () {
-	      throw new Error('clearTimeout is not defined');
+	    try {
+	        cachedClearTimeout = clearTimeout;
+	    } catch (e) {
+	        cachedClearTimeout = function () {
+	            throw new Error('clearTimeout is not defined');
+	        }
 	    }
-	  }
 	} ())
+	function runTimeout(fun) {
+	    if (cachedSetTimeout === setTimeout) {
+	        //normal enviroments in sane situations
+	        return setTimeout(fun, 0);
+	    }
+	    try {
+	        // when when somebody has screwed with setTimeout but no I.E. maddness
+	        return cachedSetTimeout(fun, 0);
+	    } catch(e){
+	        try {
+	            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
+	            return cachedSetTimeout.call(null, fun, 0);
+	        } catch(e){
+	            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+	            return cachedSetTimeout.call(this, fun, 0);
+	        }
+	    }
+	
+	
+	}
+	function runClearTimeout(marker) {
+	    if (cachedClearTimeout === clearTimeout) {
+	        //normal enviroments in sane situations
+	        return clearTimeout(marker);
+	    }
+	    try {
+	        // when when somebody has screwed with setTimeout but no I.E. maddness
+	        return cachedClearTimeout(marker);
+	    } catch (e){
+	        try {
+	            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
+	            return cachedClearTimeout.call(null, marker);
+	        } catch (e){
+	            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
+	            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
+	            return cachedClearTimeout.call(this, marker);
+	        }
+	    }
+	
+	
+	
+	}
 	var queue = [];
 	var draining = false;
 	var currentQueue;
@@ -270,7 +311,7 @@
 	    if (draining) {
 	        return;
 	    }
-	    var timeout = cachedSetTimeout.call(null, cleanUpNextTick);
+	    var timeout = runTimeout(cleanUpNextTick);
 	    draining = true;
 	
 	    var len = queue.length;
@@ -287,7 +328,7 @@
 	    }
 	    currentQueue = null;
 	    draining = false;
-	    cachedClearTimeout.call(null, timeout);
+	    runClearTimeout(timeout);
 	}
 	
 	process.nextTick = function (fun) {
@@ -299,7 +340,7 @@
 	    }
 	    queue.push(new Item(fun, args));
 	    if (queue.length === 1 && !draining) {
-	        cachedSetTimeout.call(null, drainQueue, 0);
+	        runTimeout(drainQueue);
 	    }
 	};
 	
@@ -19716,13 +19757,7 @@
 	
 	var _reactRouter = __webpack_require__(163);
 	
-	var _reactDom = __webpack_require__(158);
-	
-	var _localstorage = __webpack_require__(220);
-	
-	var _localstorage2 = _interopRequireDefault(_localstorage);
-	
-	var _global_store = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./store/global_store\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	var _global_store = __webpack_require__(220);
 	
 	var _global_store2 = _interopRequireDefault(_global_store);
 	
@@ -19730,19 +19765,19 @@
 	
 	var _mainLayout2 = _interopRequireDefault(_mainLayout);
 	
-	var _home = __webpack_require__(225);
+	var _home = __webpack_require__(224);
 	
 	var _home2 = _interopRequireDefault(_home);
 	
-	var _tutorial = __webpack_require__(226);
+	var _tutorial = __webpack_require__(225);
 	
 	var _tutorial2 = _interopRequireDefault(_tutorial);
 	
-	var _aboutMe = __webpack_require__(227);
+	var _aboutMe = __webpack_require__(226);
 	
 	var _aboutMe2 = _interopRequireDefault(_aboutMe);
 	
-	var _messages = __webpack_require__(228);
+	var _messages = __webpack_require__(227);
 	
 	var _messages2 = _interopRequireDefault(_messages);
 	
@@ -19754,7 +19789,7 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	//Store
+	// Store
 	
 	
 	// Layouts
@@ -19813,16 +19848,6 @@
 	_zeroframe2.default.route = function (cmd, message) {
 	  var info = message.params;
 	  globalStore.site = info;
-	};
-	
-	window.history.pushState = function (state, title, url) {
-	  var relative_url = url.split(_constants.APP_ID).pop();
-	  _zeroframe2.default.cmd("wrapperPushState", [state, title, relative_url]);
-	};
-	window.history.replaceState = function (state, title, url) {
-	  return;
-	  var relative_url = url.split(Constants.APP_ID).pop();
-	  _zeroframe2.default.cmd("wrapperReplaceState", [state, title, relative_url]);
 	};
 
 /***/ },
@@ -25112,40 +25137,6 @@
 /* 220 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
-	
-	var _zeroframe = __webpack_require__(162);
-	
-	var _zeroframe2 = _interopRequireDefault(_zeroframe);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	// unfinished.. can't get around the security error for accessing sessionStorage in a sandbox
-	
-	var LocalStorage = function LocalStorage() {
-	  this.storage = {};
-	
-	  window.emuStorage = {};
-	  window.emuStorage.removeItem = function (key) {
-	    this.storage[key] = undefined;
-	    this.saveSession();
-	  }.bind(this);
-	  window.emuStorage.getItem = function (key) {
-	    return this.storage[key];
-	  }.bind(this);
-	
-	  this.saveSession = function () {
-	    _zeroframe2.default.cmd("wrapperSetstorage", this.storage);
-	  };
-	};
-	
-	module.exports = new LocalStorage();
-
-/***/ },
-/* 221 */,
-/* 222 */
-/***/ function(module, exports, __webpack_require__) {
-
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
@@ -25153,128 +25144,104 @@
 	});
 	exports.default = undefined;
 	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _desc, _value, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4;
 	
-	var _class;
+	var _mobx = __webpack_require__(221);
 	
-	var _react = __webpack_require__(1);
+	var _zeroframe = __webpack_require__(162);
 	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _constants = __webpack_require__(160);
-	
-	var _reactRouter = __webpack_require__(163);
-	
-	var _mobxReact = __webpack_require__(223);
+	var _zeroframe2 = _interopRequireDefault(_zeroframe);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
+	function _initDefineProp(target, property, descriptor, context) {
+	  if (!descriptor) return;
+	  Object.defineProperty(target, property, {
+	    enumerable: descriptor.enumerable,
+	    configurable: descriptor.configurable,
+	    writable: descriptor.writable,
+	    value: descriptor.initializer ? descriptor.initializer.call(context) : void 0
+	  });
+	}
+	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) {
+	  var desc = {};
+	  Object['ke' + 'ys'](descriptor).forEach(function (key) {
+	    desc[key] = descriptor[key];
+	  });
+	  desc.enumerable = !!desc.enumerable;
+	  desc.configurable = !!desc.configurable;
 	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var MainLayout = (0, _mobxReact.observer)(_class = function (_Component) {
-	  _inherits(MainLayout, _Component);
-	
-	  function MainLayout() {
-	    _classCallCheck(this, MainLayout);
-	
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(MainLayout).apply(this, arguments));
+	  if ('value' in desc || desc.initializer) {
+	    desc.writable = true;
 	  }
 	
-	  _createClass(MainLayout, [{
-	    key: 'render',
-	    value: function render() {
-	      return _react2.default.createElement(
-	        'div',
-	        { className: 'app' },
-	        _react2.default.createElement(
-	          'nav',
-	          { className: 'navbar navbar-light bg-faded', id: 'CollapsingNavbar' },
-	          _react2.default.createElement(
-	            'button',
-	            { className: 'navbar-toggler hidden-sm-up', type: 'button', 'data-toggle': 'collapse', 'data-target': '#CollapsingNavbar' },
-	            '☰'
-	          ),
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'collapse navbar-toggleable-xs' },
-	            _react2.default.createElement(
-	              _reactRouter.Link,
-	              { to: '' + _constants.APP_ID, className: 'navbar-brand' },
-	              'Zeronet-React'
-	            ),
-	            _react2.default.createElement(
-	              'ul',
-	              { className: 'nav navbar-nav' },
-	              _react2.default.createElement(
-	                'li',
-	                { className: 'nav-item active' },
-	                _react2.default.createElement(
-	                  _reactRouter.Link,
-	                  { to: '' + _constants.APP_ID, className: 'nav-link' },
-	                  'Home ',
-	                  _react2.default.createElement(
-	                    'span',
-	                    { className: 'sr-only' },
-	                    '(current)'
-	                  )
-	                )
-	              ),
-	              _react2.default.createElement(
-	                'li',
-	                { className: 'nav-item' },
-	                _react2.default.createElement(
-	                  _reactRouter.Link,
-	                  { to: 'tutorial', className: 'nav-link' },
-	                  'Tutorial'
-	                )
-	              ),
-	              _react2.default.createElement(
-	                'li',
-	                { className: 'nav-item' },
-	                _react2.default.createElement(
-	                  _reactRouter.Link,
-	                  { to: 'about-me', className: 'nav-link' },
-	                  'About me'
-	                )
-	              ),
-	              _react2.default.createElement(
-	                'li',
-	                { className: 'nav-item' },
-	                _react2.default.createElement(
-	                  _reactRouter.Link,
-	                  { to: 'messages', className: 'nav-link' },
-	                  'Leave a message'
-	                )
-	              )
-	            )
-	          )
-	        ),
-	        _react2.default.createElement(
-	          'main',
-	          { className: 'container' },
-	          this.props.children
-	        )
-	      );
-	    }
-	  }]);
+	  desc = decorators.slice().reverse().reduce(function (desc, decorator) {
+	    return decorator(target, property, desc) || desc;
+	  }, desc);
 	
-	  return MainLayout;
-	}(_react.Component)) || _class;
+	  if (context && desc.initializer !== void 0) {
+	    desc.value = desc.initializer ? desc.initializer.call(context) : void 0;
+	    desc.initializer = undefined;
+	  }
 	
-	exports.default = MainLayout;
+	  if (desc.initializer === void 0) {
+	    Object['define' + 'Property'](target, property, desc);
+	    desc = null;
+	  }
+	
+	  return desc;
+	}
+	
+	function _initializerWarningHelper(descriptor, context) {
+	  throw new Error('Decorating class property failed. Please ensure that transform-class-properties is enabled.');
+	}
+	
+	var GlobalStore = (_class = function GlobalStore() {
+	  var _this = this;
+	
+	  _classCallCheck(this, GlobalStore);
+	
+	  this.id = Math.random();
+	
+	  _initDefineProp(this, 'name', _descriptor, this);
+	
+	  _initDefineProp(this, 'messages', _descriptor2, this);
+	
+	  _initDefineProp(this, 'certUserID', _descriptor3, this);
+	
+	  _initDefineProp(this, 'site', _descriptor4, this);
+	
+	  _zeroframe2.default.cmd('siteInfo', {}, function (info) {
+	    _this.site = info;
+	  });
+	}, (_descriptor = _applyDecoratedDescriptor(_class.prototype, 'name', [_mobx.observable], {
+	  enumerable: true,
+	  initializer: function initializer() {
+	    return 'Lola';
+	  }
+	}), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, 'messages', [_mobx.observable], {
+	  enumerable: true,
+	  initializer: function initializer() {
+	    return [];
+	  }
+	}), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, 'certUserID', [_mobx.observable], {
+	  enumerable: true,
+	  initializer: function initializer() {
+	    return null;
+	  }
+	}), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, 'site', [_mobx.observable], {
+	  enumerable: true,
+	  initializer: function initializer() {
+	    return {};
+	  }
+	})), _class);
+	exports.default = GlobalStore;
 
 /***/ },
-/* 223 */
-/***/ function(module, exports, __webpack_require__) {
-
-	!function(e,t){ true?module.exports=t(__webpack_require__(224),__webpack_require__(1),__webpack_require__(158)):"function"==typeof define&&define.amd?define(["mobx","react","react-dom"],t):"object"==typeof exports?exports.mobxReact=t(require("mobx"),require("react"),require("react-dom")):e.mobxReact=t(e.mobx,e.React,e.ReactDOM)}(this,function(e,t,r){return function(e){function t(n){if(r[n])return r[n].exports;var o=r[n]={exports:{},id:n,loaded:!1};return e[n].call(o.exports,o,o.exports,t),o.loaded=!0,o.exports}var r={};return t.m=e,t.c=r,t.p="",t(0)}([function(e,t,r){"use strict";function n(e){if(e&&e.__esModule)return e;var t={};if(null!=e)for(var r in e)Object.prototype.hasOwnProperty.call(e,r)&&(t[r]=e[r]);return t["default"]=e,t}function o(e){return e&&e.__esModule?e:{"default":e}}Object.defineProperty(t,"__esModule",{value:!0}),t.reactiveComponent=t.propTypes=t.inject=t.Provider=t.trackComponents=t.componentByNodeRegistery=t.renderReporter=t.observer=void 0;var i=arguments,a=r(1);Object.defineProperty(t,"observer",{enumerable:!0,get:function(){return a.observer}}),Object.defineProperty(t,"renderReporter",{enumerable:!0,get:function(){return a.renderReporter}}),Object.defineProperty(t,"componentByNodeRegistery",{enumerable:!0,get:function(){return a.componentByNodeRegistery}}),Object.defineProperty(t,"trackComponents",{enumerable:!0,get:function(){return a.trackComponents}});var u=r(9);Object.defineProperty(t,"Provider",{enumerable:!0,get:function(){return o(u)["default"]}});var c=r(6);Object.defineProperty(t,"inject",{enumerable:!0,get:function(){return o(c)["default"]}});var s=r(2),f=o(s),l=r(3),p=o(l),d=r(10),b=n(d),y=void 0;if(y="mobx-react",!f["default"])throw new Error(y+" requires the MobX package");if(!p["default"])throw new Error(y+" requires React to be available");t.propTypes=b,t["default"]=e.exports;t.reactiveComponent=function(){return console.warn("[mobx-react] `reactiveComponent` has been renamed to `observer` and will be removed in 1.1."),observer.apply(null,i)}},function(e,t,r){"use strict";function n(e){return e&&e.__esModule?e:{"default":e}}function o(e){return y["default"]?y["default"].findDOMNode(e):null}function i(e){var t=o(e);t&&w&&w.set(t,e),x.emit({event:"render",renderTime:e.__$mobRenderEnd-e.__$mobRenderStart,totalTime:Date.now()-e.__$mobRenderStart,component:e,node:t})}function a(){if("undefined"==typeof WeakMap)throw new Error("[mobx-react] tracking components is not supported in this browser.");g||(g=!0)}function u(e,t){var r=e[t],n=j[t];r?e[t]=function(){r.apply(this,arguments),n.apply(this,arguments)}:e[t]=n}function c(e,t){if("string"==typeof e)throw new Error("Store names should be provided as array");if(Array.isArray(e))return t?O["default"].apply(null,e)(c(t)):function(t){return c(e,t)};var r=e;if(!("function"!=typeof r||r.prototype&&r.prototype.render||r.isReactClass||d["default"].Component.isPrototypeOf(r)))return c(d["default"].createClass({displayName:r.displayName||r.name,propTypes:r.propTypes,contextTypes:r.contextTypes,getDefaultProps:function(){return r.defaultProps},render:function(){return r.call(this,this.props,this.context)}}));if(!r)throw new Error("Please pass a valid component to 'observer'");var n=r.prototype||r;return["componentWillMount","componentWillUnmount","componentDidMount","componentDidUpdate"].forEach(function(e){u(n,e)}),n.shouldComponentUpdate||(n.shouldComponentUpdate=j.shouldComponentUpdate),r.isMobXReactObserver=!0,r}Object.defineProperty(t,"__esModule",{value:!0}),t.renderReporter=t.componentByNodeRegistery=void 0;var s="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol?"symbol":typeof e};t.trackComponents=a,t.observer=c;var f=r(2),l=n(f),p=r(3),d=n(p),b=r(4),y=n(b),m=r(5),v=n(m),h=r(6),O=n(h),g=!1,w=t.componentByNodeRegistery="undefined"!=typeof WeakMap?new WeakMap:void 0,x=t.renderReporter=new v["default"],j={componentWillMount:function(){var e=this,t=this.displayName||this.name||this.constructor&&(this.constructor.displayName||this.constructor.name)||"<component>",r=this._reactInternalInstance&&this._reactInternalInstance._rootNodeID,n=this.render.bind(this),o=null,i=!1,a=function(){return o=new l["default"].Reaction(t+"#"+r+".render()",function(){i||(i=!0,"function"==typeof e.componentWillReact&&e.componentWillReact(),e.__$mobxIsUnmounted!==!0&&d["default"].Component.prototype.forceUpdate.call(e))}),u.$mobx=o,e.render=u,u()},u=function(){i=!1;var t=void 0;return o.track(function(){g&&(e.__$mobRenderStart=Date.now()),t=l["default"].extras.allowStateChanges(!1,n),g&&(e.__$mobRenderEnd=Date.now())}),t};this.render=a},componentWillUnmount:function(){if(this.render.$mobx&&this.render.$mobx.dispose(),this.__$mobxIsUnmounted=!0,g){var e=o(this);e&&w&&w["delete"](e),x.emit({event:"destroy",component:this,node:e})}},componentDidMount:function(){g&&i(this)},componentDidUpdate:function(){g&&i(this)},shouldComponentUpdate:function(e,t){if(this.render.$mobx&&this.render.$mobx.isScheduled()===!0)return!1;if(this.state!==t)return!0;var r=Object.keys(this.props);if(r.length!==Object.keys(e).length)return!0;for(var n=void 0,o=r.length-1;n=r[o];o--){var i=e[n];if(i!==this.props[n])return!0;if(i&&"object"===("undefined"==typeof i?"undefined":s(i))&&!l["default"].isObservable(i))return!0}return!1}}},function(t,r){t.exports=e},function(e,r){e.exports=t},function(e,t){e.exports=r},function(e,t){"use strict";function r(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(t,"__esModule",{value:!0});var n=function(){function e(e,t){for(var r=0;r<t.length;r++){var n=t[r];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}return function(t,r,n){return r&&e(t.prototype,r),n&&e(t,n),t}}(),o=function(){function e(){r(this,e),this.listeners=[]}return n(e,[{key:"on",value:function(e){var t=this;return this.listeners.push(e),function(){var r=t.listeners.indexOf(e);-1!==r&&t.listeners.splice(r,1)}}},{key:"emit",value:function(e){this.listeners.forEach(function(t){return t(e)})}}]),e}();t["default"]=o},function(e,t,r){(function(e){"use strict";function n(e){return e&&e.__esModule?e:{"default":e}}function o(e,t){var r=s["default"].createClass({displayName:"MobXStoreInjector",render:function(){var r=this,n={};for(var o in this.props)this.props.hasOwnProperty(o)&&(n[o]=this.props[o]);var i=e(this.context.mobxStores||{},n,this.context)||{};for(var a in i)n[a]=i[a];return n.ref=function(e){r.wrappedInstance=e},s["default"].createElement(t,n)}});return r.contextTypes={mobxStores:c.PropTypes.object},r.wrappedComponent=t,i(r,t),(0,l["default"])(r,t),r}function i(t,r){"undefined"!=typeof e&&e.env&&"production"!==e.env.NODE_ENV&&["propTypes","defaultProps","contextTypes"].forEach(function(e){var n=t[e];Object.defineProperty(t,e,{set:function(t){var n=r.displayName||r.name;console.warn("Mobx Injector: you are trying to attach "+e+" to HOC instead of "+n+". Use `wrappedComponent` property.")},get:function(){return n},configurable:!0})})}function a(e){return function(t,r){return e.forEach(function(e){if(!(e in r)){if(!(e in t))throw new Error("MobX observer: Store '"+e+"' is not available! Make sure it is provided by some Provider");r[e]=t[e]}}),r}}function u(){var e=void 0;if("function"==typeof arguments[0])e=arguments[0];else{for(var t=[],r=0;r<arguments.length;r++)t[r]=arguments[r];e=a(t)}return function(t){return o(e,t)}}Object.defineProperty(t,"__esModule",{value:!0}),t["default"]=u;var c=r(3),s=n(c),f=r(8),l=n(f)}).call(t,r(7))},function(e,t){function r(e){return c===setTimeout?setTimeout(e,0):c.call(null,e,0)}function n(e){s===clearTimeout?clearTimeout(e):s.call(null,e)}function o(){d&&l&&(d=!1,l.length?p=l.concat(p):b=-1,p.length&&i())}function i(){if(!d){var e=r(o);d=!0;for(var t=p.length;t;){for(l=p,p=[];++b<t;)l&&l[b].run();b=-1,t=p.length}l=null,d=!1,n(e)}}function a(e,t){this.fun=e,this.array=t}function u(){}var c,s,f=e.exports={};!function(){try{c=setTimeout}catch(e){c=function(){throw new Error("setTimeout is not defined")}}try{s=clearTimeout}catch(e){s=function(){throw new Error("clearTimeout is not defined")}}}();var l,p=[],d=!1,b=-1;f.nextTick=function(e){var t=new Array(arguments.length-1);if(arguments.length>1)for(var n=1;n<arguments.length;n++)t[n-1]=arguments[n];p.push(new a(e,t)),1!==p.length||d||r(i)},a.prototype.run=function(){this.fun.apply(null,this.array)},f.title="browser",f.browser=!0,f.env={},f.argv=[],f.version="",f.versions={},f.on=u,f.addListener=u,f.once=u,f.off=u,f.removeListener=u,f.removeAllListeners=u,f.emit=u,f.binding=function(e){throw new Error("process.binding is not supported")},f.cwd=function(){return"/"},f.chdir=function(e){throw new Error("process.chdir is not supported")},f.umask=function(){return 0}},function(e,t){"use strict";var r={childContextTypes:!0,contextTypes:!0,defaultProps:!0,displayName:!0,getDefaultProps:!0,mixins:!0,propTypes:!0,type:!0},n={name:!0,length:!0,prototype:!0,caller:!0,arguments:!0,arity:!0},o="function"==typeof Object.getOwnPropertySymbols;e.exports=function(e,t,i){if("string"!=typeof t){var a=Object.getOwnPropertyNames(t);o&&(a=a.concat(Object.getOwnPropertySymbols(t)));for(var u=0;u<a.length;++u)if(!(r[a[u]]||n[a[u]]||i&&i[a[u]]))try{e[a[u]]=t[a[u]]}catch(c){}}return e}},function(e,t,r){"use strict";function n(e){return e&&e.__esModule?e:{"default":e}}function o(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function i(e,t){if(!e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!t||"object"!=typeof t&&"function"!=typeof t?e:t}function a(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(Object.setPrototypeOf?Object.setPrototypeOf(e,t):e.__proto__=t)}Object.defineProperty(t,"__esModule",{value:!0});var u=function(){function e(e,t){for(var r=0;r<t.length;r++){var n=t[r];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}return function(t,r,n){return r&&e(t.prototype,r),n&&e(t,n),t}}(),c=r(3),s=n(c),f={children:!0,key:!0,ref:!0},l=function(e){function t(){return o(this,t),i(this,Object.getPrototypeOf(t).apply(this,arguments))}return a(t,e),u(t,[{key:"render",value:function(){return s["default"].Children.only(this.props.children)}},{key:"getChildContext",value:function(){var e={},t=this.context.mobxStores;if(t)for(var r in t)e[r]=t[r];for(var n in this.props)f[n]||(e[n]=this.props[n]);return{mobxStores:e}}},{key:"componentWillReceiveProps",value:function(e){Object.keys(e).length!==Object.keys(this.props).length&&console.warn("MobX Provider: The set of provided stores has changed. Please avoid changing stores as the change might not propagate to all children");for(var t in e)f[t]||this.props[t]===e[t]||console.warn("MobX Provider: Provided store '"+t+"' has changed. Please avoid replacing stores as the change might not propagate to all children")}}]),t}(c.Component);l.contextTypes={mobxStores:c.PropTypes.object},l.childContextTypes={mobxStores:c.PropTypes.object.isRequired},t["default"]=l},function(e,t,r){"use strict";function n(e){function t(t,r,n,o,i,a){for(var u=arguments.length,c=Array(u>6?u-6:0),s=6;u>s;s++)c[s-6]=arguments[s];return(0,f.untracked)(function(){if(o=o||"<<anonymous>>",a=a||n,null==r[n]){if(t){var u=null===r[n]?"null":"undefined";return new Error("The "+i+" `"+a+"` is marked as required in `"+o+"`, but its value is `"+u+"`.")}return null}return e.apply(void 0,[r,n,o,i,a].concat(c))})}var r=t.bind(null,!1);return r.isRequired=t.bind(null,!0),r}function o(e,t){return"symbol"===e?!0:"Symbol"===t["@@toStringTag"]?!0:"function"==typeof Symbol&&t instanceof Symbol}function i(e){var t="undefined"==typeof e?"undefined":s(e);return Array.isArray(e)?"array":e instanceof RegExp?"object":o(t,e)?"symbol":t}function a(e){var t=i(e);if("object"===t){if(e instanceof Date)return"date";if(e instanceof RegExp)return"regexp"}return t}function u(e,t){return n(function(r,n,o,u,c){return(0,f.untracked)(function(){if(e&&i(r[n])===t.toLowerCase())return null;var u=void 0;switch(t){case"Array":u=f.isObservableArray;break;case"Object":u=f.isObservableObject;break;case"Map":u=f.isObservableMap;break;default:throw new Error("Unexpected mobxType: "+t)}var s=r[n];if(!u(s)){var l=a(s),p=e?" or javascript `"+t.toLowerCase()+"`":"";return new Error("Invalid prop `"+c+"` of type `"+l+"` supplied to `"+o+"`, expected `mobx.Observable"+t+"`"+p+".")}return null})})}function c(e,t){return n(function(r,n,o,i,a){for(var c=arguments.length,s=Array(c>5?c-5:0),l=5;c>l;l++)s[l-5]=arguments[l];return(0,f.untracked)(function(){if("function"!=typeof t)return new Error("Property `"+a+"` of component `"+o+"` has invalid PropType notation.");var c=u(e,"Array")(r,n,o);if(c instanceof Error)return c;for(var f=r[n],l=0;l<f.length;l++)if(c=t.apply(void 0,[f,l,o,i,a+"["+l+"]"].concat(s)),c instanceof Error)return c;return null})})}Object.defineProperty(t,"__esModule",{value:!0}),t.objectOrObservableObject=t.arrayOrObservableArrayOf=t.arrayOrObservableArray=t.observableObject=t.observableMap=t.observableArrayOf=t.observableArray=void 0;var s="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol?"symbol":typeof e},f=r(2);t.observableArray=u(!1,"Array"),t.observableArrayOf=c.bind(null,!1),t.observableMap=u(!1,"Map"),t.observableObject=u(!1,"Object"),t.arrayOrObservableArray=u(!0,"Array"),t.arrayOrObservableArrayOf=c.bind(null,!0),t.objectOrObservableObject=u(!0,"Object")}])});
-
-/***/ },
-/* 224 */
+/* 221 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {"use strict";
@@ -27832,7 +27799,138 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 225 */
+/* 222 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = undefined;
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _class;
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _constants = __webpack_require__(160);
+	
+	var _reactRouter = __webpack_require__(163);
+	
+	var _mobxReact = __webpack_require__(223);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var MainLayout = (0, _mobxReact.observer)(_class = function (_Component) {
+	  _inherits(MainLayout, _Component);
+	
+	  function MainLayout() {
+	    _classCallCheck(this, MainLayout);
+	
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(MainLayout).apply(this, arguments));
+	  }
+	
+	  _createClass(MainLayout, [{
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'app' },
+	        _react2.default.createElement(
+	          'nav',
+	          { className: 'navbar navbar-light bg-faded', id: 'CollapsingNavbar' },
+	          _react2.default.createElement(
+	            'button',
+	            { className: 'navbar-toggler hidden-sm-up', type: 'button', 'data-toggle': 'collapse', 'data-target': '#CollapsingNavbar' },
+	            '☰'
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'collapse navbar-toggleable-xs' },
+	            _react2.default.createElement(
+	              _reactRouter.Link,
+	              { to: '' + _constants.APP_ID, className: 'navbar-brand' },
+	              'Zeronet-React'
+	            ),
+	            _react2.default.createElement(
+	              'ul',
+	              { className: 'nav navbar-nav' },
+	              _react2.default.createElement(
+	                'li',
+	                { className: 'nav-item active' },
+	                _react2.default.createElement(
+	                  _reactRouter.Link,
+	                  { to: '' + _constants.APP_ID, className: 'nav-link' },
+	                  'Home ',
+	                  _react2.default.createElement(
+	                    'span',
+	                    { className: 'sr-only' },
+	                    '(current)'
+	                  )
+	                )
+	              ),
+	              _react2.default.createElement(
+	                'li',
+	                { className: 'nav-item' },
+	                _react2.default.createElement(
+	                  _reactRouter.Link,
+	                  { to: 'tutorial', className: 'nav-link' },
+	                  'Tutorial'
+	                )
+	              ),
+	              _react2.default.createElement(
+	                'li',
+	                { className: 'nav-item' },
+	                _react2.default.createElement(
+	                  _reactRouter.Link,
+	                  { to: 'about-me', className: 'nav-link' },
+	                  'About me'
+	                )
+	              ),
+	              _react2.default.createElement(
+	                'li',
+	                { className: 'nav-item' },
+	                _react2.default.createElement(
+	                  _reactRouter.Link,
+	                  { to: 'messages', className: 'nav-link' },
+	                  'Leave a message'
+	                )
+	              )
+	            )
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'main',
+	          { className: 'container' },
+	          this.props.children
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return MainLayout;
+	}(_react.Component)) || _class;
+	
+	exports.default = MainLayout;
+
+/***/ },
+/* 223 */
+/***/ function(module, exports, __webpack_require__) {
+
+	!function(e,t){ true?module.exports=t(__webpack_require__(221),__webpack_require__(1),__webpack_require__(158)):"function"==typeof define&&define.amd?define(["mobx","react","react-dom"],t):"object"==typeof exports?exports.mobxReact=t(require("mobx"),require("react"),require("react-dom")):e.mobxReact=t(e.mobx,e.React,e.ReactDOM)}(this,function(e,t,r){return function(e){function t(n){if(r[n])return r[n].exports;var o=r[n]={exports:{},id:n,loaded:!1};return e[n].call(o.exports,o,o.exports,t),o.loaded=!0,o.exports}var r={};return t.m=e,t.c=r,t.p="",t(0)}([function(e,t,r){"use strict";function n(e){if(e&&e.__esModule)return e;var t={};if(null!=e)for(var r in e)Object.prototype.hasOwnProperty.call(e,r)&&(t[r]=e[r]);return t["default"]=e,t}function o(e){return e&&e.__esModule?e:{"default":e}}Object.defineProperty(t,"__esModule",{value:!0}),t.reactiveComponent=t.propTypes=t.inject=t.Provider=t.trackComponents=t.componentByNodeRegistery=t.renderReporter=t.observer=void 0;var i=arguments,a=r(1);Object.defineProperty(t,"observer",{enumerable:!0,get:function(){return a.observer}}),Object.defineProperty(t,"renderReporter",{enumerable:!0,get:function(){return a.renderReporter}}),Object.defineProperty(t,"componentByNodeRegistery",{enumerable:!0,get:function(){return a.componentByNodeRegistery}}),Object.defineProperty(t,"trackComponents",{enumerable:!0,get:function(){return a.trackComponents}});var u=r(9);Object.defineProperty(t,"Provider",{enumerable:!0,get:function(){return o(u)["default"]}});var c=r(6);Object.defineProperty(t,"inject",{enumerable:!0,get:function(){return o(c)["default"]}});var s=r(2),f=o(s),l=r(3),p=o(l),d=r(10),b=n(d),y=void 0;if(y="mobx-react",!f["default"])throw new Error(y+" requires the MobX package");if(!p["default"])throw new Error(y+" requires React to be available");t.propTypes=b,t["default"]=e.exports;t.reactiveComponent=function(){return console.warn("[mobx-react] `reactiveComponent` has been renamed to `observer` and will be removed in 1.1."),observer.apply(null,i)}},function(e,t,r){"use strict";function n(e){return e&&e.__esModule?e:{"default":e}}function o(e){return y["default"]?y["default"].findDOMNode(e):null}function i(e){var t=o(e);t&&w&&w.set(t,e),x.emit({event:"render",renderTime:e.__$mobRenderEnd-e.__$mobRenderStart,totalTime:Date.now()-e.__$mobRenderStart,component:e,node:t})}function a(){if("undefined"==typeof WeakMap)throw new Error("[mobx-react] tracking components is not supported in this browser.");g||(g=!0)}function u(e,t){var r=e[t],n=j[t];r?e[t]=function(){r.apply(this,arguments),n.apply(this,arguments)}:e[t]=n}function c(e,t){if("string"==typeof e)throw new Error("Store names should be provided as array");if(Array.isArray(e))return t?O["default"].apply(null,e)(c(t)):function(t){return c(e,t)};var r=e;if(!("function"!=typeof r||r.prototype&&r.prototype.render||r.isReactClass||d["default"].Component.isPrototypeOf(r)))return c(d["default"].createClass({displayName:r.displayName||r.name,propTypes:r.propTypes,contextTypes:r.contextTypes,getDefaultProps:function(){return r.defaultProps},render:function(){return r.call(this,this.props,this.context)}}));if(!r)throw new Error("Please pass a valid component to 'observer'");var n=r.prototype||r;return["componentWillMount","componentWillUnmount","componentDidMount","componentDidUpdate"].forEach(function(e){u(n,e)}),n.shouldComponentUpdate||(n.shouldComponentUpdate=j.shouldComponentUpdate),r.isMobXReactObserver=!0,r}Object.defineProperty(t,"__esModule",{value:!0}),t.renderReporter=t.componentByNodeRegistery=void 0;var s="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol?"symbol":typeof e};t.trackComponents=a,t.observer=c;var f=r(2),l=n(f),p=r(3),d=n(p),b=r(4),y=n(b),m=r(5),v=n(m),h=r(6),O=n(h),g=!1,w=t.componentByNodeRegistery="undefined"!=typeof WeakMap?new WeakMap:void 0,x=t.renderReporter=new v["default"],j={componentWillMount:function(){var e=this,t=this.displayName||this.name||this.constructor&&(this.constructor.displayName||this.constructor.name)||"<component>",r=this._reactInternalInstance&&this._reactInternalInstance._rootNodeID,n=this.render.bind(this),o=null,i=!1,a=function(){return o=new l["default"].Reaction(t+"#"+r+".render()",function(){i||(i=!0,"function"==typeof e.componentWillReact&&e.componentWillReact(),e.__$mobxIsUnmounted!==!0&&d["default"].Component.prototype.forceUpdate.call(e))}),u.$mobx=o,e.render=u,u()},u=function(){i=!1;var t=void 0;return o.track(function(){g&&(e.__$mobRenderStart=Date.now()),t=l["default"].extras.allowStateChanges(!1,n),g&&(e.__$mobRenderEnd=Date.now())}),t};this.render=a},componentWillUnmount:function(){if(this.render.$mobx&&this.render.$mobx.dispose(),this.__$mobxIsUnmounted=!0,g){var e=o(this);e&&w&&w["delete"](e),x.emit({event:"destroy",component:this,node:e})}},componentDidMount:function(){g&&i(this)},componentDidUpdate:function(){g&&i(this)},shouldComponentUpdate:function(e,t){if(this.render.$mobx&&this.render.$mobx.isScheduled()===!0)return!1;if(this.state!==t)return!0;var r=Object.keys(this.props);if(r.length!==Object.keys(e).length)return!0;for(var n=void 0,o=r.length-1;n=r[o];o--){var i=e[n];if(i!==this.props[n])return!0;if(i&&"object"===("undefined"==typeof i?"undefined":s(i))&&!l["default"].isObservable(i))return!0}return!1}}},function(t,r){t.exports=e},function(e,r){e.exports=t},function(e,t){e.exports=r},function(e,t){"use strict";function r(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(t,"__esModule",{value:!0});var n=function(){function e(e,t){for(var r=0;r<t.length;r++){var n=t[r];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}return function(t,r,n){return r&&e(t.prototype,r),n&&e(t,n),t}}(),o=function(){function e(){r(this,e),this.listeners=[]}return n(e,[{key:"on",value:function(e){var t=this;return this.listeners.push(e),function(){var r=t.listeners.indexOf(e);-1!==r&&t.listeners.splice(r,1)}}},{key:"emit",value:function(e){this.listeners.forEach(function(t){return t(e)})}}]),e}();t["default"]=o},function(e,t,r){(function(e){"use strict";function n(e){return e&&e.__esModule?e:{"default":e}}function o(e,t){var r=s["default"].createClass({displayName:"MobXStoreInjector",render:function(){var r=this,n={};for(var o in this.props)this.props.hasOwnProperty(o)&&(n[o]=this.props[o]);var i=e(this.context.mobxStores||{},n,this.context)||{};for(var a in i)n[a]=i[a];return n.ref=function(e){r.wrappedInstance=e},s["default"].createElement(t,n)}});return r.contextTypes={mobxStores:c.PropTypes.object},r.wrappedComponent=t,i(r,t),(0,l["default"])(r,t),r}function i(t,r){"undefined"!=typeof e&&e.env&&"production"!==e.env.NODE_ENV&&["propTypes","defaultProps","contextTypes"].forEach(function(e){var n=t[e];Object.defineProperty(t,e,{set:function(t){var n=r.displayName||r.name;console.warn("Mobx Injector: you are trying to attach "+e+" to HOC instead of "+n+". Use `wrappedComponent` property.")},get:function(){return n},configurable:!0})})}function a(e){return function(t,r){return e.forEach(function(e){if(!(e in r)){if(!(e in t))throw new Error("MobX observer: Store '"+e+"' is not available! Make sure it is provided by some Provider");r[e]=t[e]}}),r}}function u(){var e=void 0;if("function"==typeof arguments[0])e=arguments[0];else{for(var t=[],r=0;r<arguments.length;r++)t[r]=arguments[r];e=a(t)}return function(t){return o(e,t)}}Object.defineProperty(t,"__esModule",{value:!0}),t["default"]=u;var c=r(3),s=n(c),f=r(8),l=n(f)}).call(t,r(7))},function(e,t){function r(e){return c===setTimeout?setTimeout(e,0):c.call(null,e,0)}function n(e){s===clearTimeout?clearTimeout(e):s.call(null,e)}function o(){d&&l&&(d=!1,l.length?p=l.concat(p):b=-1,p.length&&i())}function i(){if(!d){var e=r(o);d=!0;for(var t=p.length;t;){for(l=p,p=[];++b<t;)l&&l[b].run();b=-1,t=p.length}l=null,d=!1,n(e)}}function a(e,t){this.fun=e,this.array=t}function u(){}var c,s,f=e.exports={};!function(){try{c=setTimeout}catch(e){c=function(){throw new Error("setTimeout is not defined")}}try{s=clearTimeout}catch(e){s=function(){throw new Error("clearTimeout is not defined")}}}();var l,p=[],d=!1,b=-1;f.nextTick=function(e){var t=new Array(arguments.length-1);if(arguments.length>1)for(var n=1;n<arguments.length;n++)t[n-1]=arguments[n];p.push(new a(e,t)),1!==p.length||d||r(i)},a.prototype.run=function(){this.fun.apply(null,this.array)},f.title="browser",f.browser=!0,f.env={},f.argv=[],f.version="",f.versions={},f.on=u,f.addListener=u,f.once=u,f.off=u,f.removeListener=u,f.removeAllListeners=u,f.emit=u,f.binding=function(e){throw new Error("process.binding is not supported")},f.cwd=function(){return"/"},f.chdir=function(e){throw new Error("process.chdir is not supported")},f.umask=function(){return 0}},function(e,t){"use strict";var r={childContextTypes:!0,contextTypes:!0,defaultProps:!0,displayName:!0,getDefaultProps:!0,mixins:!0,propTypes:!0,type:!0},n={name:!0,length:!0,prototype:!0,caller:!0,arguments:!0,arity:!0},o="function"==typeof Object.getOwnPropertySymbols;e.exports=function(e,t,i){if("string"!=typeof t){var a=Object.getOwnPropertyNames(t);o&&(a=a.concat(Object.getOwnPropertySymbols(t)));for(var u=0;u<a.length;++u)if(!(r[a[u]]||n[a[u]]||i&&i[a[u]]))try{e[a[u]]=t[a[u]]}catch(c){}}return e}},function(e,t,r){"use strict";function n(e){return e&&e.__esModule?e:{"default":e}}function o(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function i(e,t){if(!e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!t||"object"!=typeof t&&"function"!=typeof t?e:t}function a(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(Object.setPrototypeOf?Object.setPrototypeOf(e,t):e.__proto__=t)}Object.defineProperty(t,"__esModule",{value:!0});var u=function(){function e(e,t){for(var r=0;r<t.length;r++){var n=t[r];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}return function(t,r,n){return r&&e(t.prototype,r),n&&e(t,n),t}}(),c=r(3),s=n(c),f={children:!0,key:!0,ref:!0},l=function(e){function t(){return o(this,t),i(this,Object.getPrototypeOf(t).apply(this,arguments))}return a(t,e),u(t,[{key:"render",value:function(){return s["default"].Children.only(this.props.children)}},{key:"getChildContext",value:function(){var e={},t=this.context.mobxStores;if(t)for(var r in t)e[r]=t[r];for(var n in this.props)f[n]||(e[n]=this.props[n]);return{mobxStores:e}}},{key:"componentWillReceiveProps",value:function(e){Object.keys(e).length!==Object.keys(this.props).length&&console.warn("MobX Provider: The set of provided stores has changed. Please avoid changing stores as the change might not propagate to all children");for(var t in e)f[t]||this.props[t]===e[t]||console.warn("MobX Provider: Provided store '"+t+"' has changed. Please avoid replacing stores as the change might not propagate to all children")}}]),t}(c.Component);l.contextTypes={mobxStores:c.PropTypes.object},l.childContextTypes={mobxStores:c.PropTypes.object.isRequired},t["default"]=l},function(e,t,r){"use strict";function n(e){function t(t,r,n,o,i,a){for(var u=arguments.length,c=Array(u>6?u-6:0),s=6;u>s;s++)c[s-6]=arguments[s];return(0,f.untracked)(function(){if(o=o||"<<anonymous>>",a=a||n,null==r[n]){if(t){var u=null===r[n]?"null":"undefined";return new Error("The "+i+" `"+a+"` is marked as required in `"+o+"`, but its value is `"+u+"`.")}return null}return e.apply(void 0,[r,n,o,i,a].concat(c))})}var r=t.bind(null,!1);return r.isRequired=t.bind(null,!0),r}function o(e,t){return"symbol"===e?!0:"Symbol"===t["@@toStringTag"]?!0:"function"==typeof Symbol&&t instanceof Symbol}function i(e){var t="undefined"==typeof e?"undefined":s(e);return Array.isArray(e)?"array":e instanceof RegExp?"object":o(t,e)?"symbol":t}function a(e){var t=i(e);if("object"===t){if(e instanceof Date)return"date";if(e instanceof RegExp)return"regexp"}return t}function u(e,t){return n(function(r,n,o,u,c){return(0,f.untracked)(function(){if(e&&i(r[n])===t.toLowerCase())return null;var u=void 0;switch(t){case"Array":u=f.isObservableArray;break;case"Object":u=f.isObservableObject;break;case"Map":u=f.isObservableMap;break;default:throw new Error("Unexpected mobxType: "+t)}var s=r[n];if(!u(s)){var l=a(s),p=e?" or javascript `"+t.toLowerCase()+"`":"";return new Error("Invalid prop `"+c+"` of type `"+l+"` supplied to `"+o+"`, expected `mobx.Observable"+t+"`"+p+".")}return null})})}function c(e,t){return n(function(r,n,o,i,a){for(var c=arguments.length,s=Array(c>5?c-5:0),l=5;c>l;l++)s[l-5]=arguments[l];return(0,f.untracked)(function(){if("function"!=typeof t)return new Error("Property `"+a+"` of component `"+o+"` has invalid PropType notation.");var c=u(e,"Array")(r,n,o);if(c instanceof Error)return c;for(var f=r[n],l=0;l<f.length;l++)if(c=t.apply(void 0,[f,l,o,i,a+"["+l+"]"].concat(s)),c instanceof Error)return c;return null})})}Object.defineProperty(t,"__esModule",{value:!0}),t.objectOrObservableObject=t.arrayOrObservableArrayOf=t.arrayOrObservableArray=t.observableObject=t.observableMap=t.observableArrayOf=t.observableArray=void 0;var s="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol?"symbol":typeof e},f=r(2);t.observableArray=u(!1,"Array"),t.observableArrayOf=c.bind(null,!1),t.observableMap=u(!1,"Map"),t.observableObject=u(!1,"Object"),t.arrayOrObservableArray=u(!0,"Array"),t.arrayOrObservableArrayOf=c.bind(null,!0),t.objectOrObservableObject=u(!0,"Object")}])});
+
+/***/ },
+/* 224 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -27896,12 +27994,10 @@
 	  return Home;
 	}(_react.Component)) || _class;
 	
-	;
-	
 	exports.default = Home;
 
 /***/ },
-/* 226 */
+/* 225 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -27956,12 +28052,10 @@
 	  return Tutorial;
 	}(_react.Component);
 	
-	;
-	
 	exports.default = Tutorial;
 
 /***/ },
-/* 227 */
+/* 226 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -28038,14 +28132,14 @@
 	}(_react.Component)) || _class;
 	
 	exports.default = AboutMe;
-	;
+	
 	
 	AboutMe.contextTypes = {
 	  globalStore: _react2.default.PropTypes.object.isRequired
 	};
 
 /***/ },
-/* 228 */
+/* 227 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -28068,12 +28162,6 @@
 	var _zeroframe2 = _interopRequireDefault(_zeroframe);
 	
 	var _mobxReact = __webpack_require__(223);
-	
-	var _actions = __webpack_require__(229);
-	
-	var messagesActions = _interopRequireWildcard(_actions);
-	
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -28102,14 +28190,14 @@
 	    value: function componentWillMount() {
 	      var _this2 = this;
 	
-	      _zeroframe2.default.cmd("dbQuery", ["SELECT * FROM message ORDER BY date_added"], function (data) {
+	      _zeroframe2.default.cmd('dbQuery', ['SELECT * FROM message ORDER BY date_added'], function (data) {
 	        _this2.context.globalStore.messages = data;
 	      });
 	    }
 	  }, {
 	    key: 'handleClick',
 	    value: function handleClick() {
-	      _zeroframe2.default.cmd("certSelect", [["zeroid.bit"]], null);
+	      _zeroframe2.default.cmd('certSelect', [['zeroid.bit']], null);
 	    }
 	  }, {
 	    key: 'handleTextChange',
@@ -28122,29 +28210,28 @@
 	      var _this3 = this;
 	
 	      e.preventDefault();
-	      var inner_path = "data/users/" + this.context.globalStore.site.auth_address + "/data.json";
-	      _zeroframe2.default.cmd("fileGet", { "inner_path": inner_path, "required": false }, function (data) {
+	      var innerPath = 'data/users/' + this.context.globalStore.site.auth_address + '/data.json';
+	      _zeroframe2.default.cmd('fileGet', { 'inner_path': innerPath, 'required': false }, function (data) {
 	        if (data) {
 	          data = JSON.parse(data);
 	        } else {
-	          data = { "message": [] };
+	          data = { 'message': [] };
 	        }
 	        data.message.push({
-	          "body": _this3.state.text,
-	          "date_added": new Date()
+	          'body': _this3.state.text,
+	          'date_added': new Date()
 	        });
-	        var json_raw = unescape(encodeURIComponent(JSON.stringify(data, undefined, '\t')));
-	        _zeroframe2.default.cmd("fileWrite", [inner_path, btoa(json_raw)], function (res) {
-	          if (res == "ok") {
-	            console.log('ok');
-	            _zeroframe2.default.cmd("sitePublish", { "inner_path": inner_path }, function (res) {
+	        var jsonRaw = unescape(encodeURIComponent(JSON.stringify(data, undefined, '\t')));
+	        _zeroframe2.default.cmd('fileWrite', [innerPath, window.btoa(jsonRaw)], function (res) {
+	          if (res === 'ok') {
+	            _zeroframe2.default.cmd('sitePublish', { 'inner_path': innerPath }, function (res) {
 	              console.log(res);
 	            });
-	            _zeroframe2.default.cmd("dbQuery", ["SELECT * FROM message ORDER BY date_added"], function (data) {
+	            _zeroframe2.default.cmd('dbQuery', ['SELECT * FROM message ORDER BY date_added'], function (data) {
 	              _this3.context.globalStore.messages = data;
 	            });
 	          } else {
-	            _zeroframe2.default.cmd("wrapperNotification", ["error", "File write error:" + res]);
+	            _zeroframe2.default.cmd('wrapperNotification', ['error', 'File write error:' + res]);
 	          }
 	        });
 	      });
@@ -28233,54 +28320,6 @@
 	Messages.contextTypes = {
 	  globalStore: _react2.default.PropTypes.object.isRequired
 	};
-	
-	function mapStateToProps(state) {
-	  return {
-	    site: state.site,
-	    messages: state.messages
-	  };
-	}
-	
-	function mapDispatchToProps(dispatch) {
-	  return {
-	    actions: bindActionCreators(messagesActions, dispatch)
-	  };
-	}
-
-/***/ },
-/* 229 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.updateMessages = updateMessages;
-	
-	var _constants = __webpack_require__(230);
-	
-	var types = _interopRequireWildcard(_constants);
-	
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-	
-	function updateMessages(messages) {
-	  return {
-	    type: types.UPDATE_MESSAGES,
-	    messages: messages
-	  };
-	}
-
-/***/ },
-/* 230 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	var UPDATE_MESSAGES = exports.UPDATE_MESSAGES = 'UPDATE_MESSAGES';
 
 /***/ }
 /******/ ]);
