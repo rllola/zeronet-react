@@ -1,0 +1,32 @@
+{
+ "address": "<YOUR ADDRESS HERE>",
+ "files": {},
+ "ignore": ".*",
+ "inner_path": "data/users/content.json",
+ "modified": 1473958193.267468,
+ "signs": {
+ },
+ "user_contents": {
+  "cert_signers": {
+   "zeroid.bit": [ "1iD5ZQJMNXu43w1qLB8sfdHVKppVMduGz" ]
+  },
+  "permission_rules": {
+   ".*": {
+    "files_allowed": "data.json",
+    "max_size": 10000
+   },
+   "bitid/.*@zeroid.bit": {
+    "files_allowed": "data.json",
+    "max_size": 15000
+   },
+   "bitmsg/.*@zeroid.bit": {
+    "files_allowed": "data.json",
+    "max_size": 15000
+   }
+  },
+  "permissions": {
+   "bad@zeroid.bit": false,
+   "lola@zeroid.bit": { "max_size": 10000000 }
+  }
+ }
+}

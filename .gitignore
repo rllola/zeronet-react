@@ -1,6 +1,6 @@
 content.json
-data/
 !data/users/content.json.example
+data/
 node_modules/
 .jshintrc
 public/js/
