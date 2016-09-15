@@ -30,7 +30,9 @@ class Messages extends Component {
     this.handleTextChange = this.handleTextChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
 
-    this.state = {}
+    this.state = {
+      messages: this.props.messages
+    }
   }
 
   handleClick () {
@@ -57,6 +59,9 @@ class Messages extends Component {
       var jsonRaw = unescape(encodeURIComponent(JSON.stringify(data, undefined, '\t')))
       ZeroFrame.cmd('fileWrite', [innerPath, window.btoa(jsonRaw)], (res) => {
         if (res === 'ok') {
+          ZeroFrame.cmd('dbQuery', ['SELECT * FROM message ORDER BY date_added'], (data) => {
+            this.setState({messages: data, text: ''})
+          })
           ZeroFrame.cmd('sitePublish', {'inner_path': innerPath}, (res) => {
             console.log(res)
           })
@@ -95,7 +100,7 @@ class Messages extends Component {
         }
 
         <ul>
-          {this.props.messages.map((message) => {
+          {this.state.messages.map((message) => {
             return (<li>{message.body}</li>)
           })}
         </ul>
