@@ -4,7 +4,7 @@ import { Link } from 'react-router'
 import { observer } from 'mobx-react'
 
 @observer
-export default class MainLayout extends Component {
+class MainLayout extends Component {
   render () {
     return (
       <div className="app">
@@ -37,3 +37,5 @@ export default class MainLayout extends Component {
     )
   }
 }
+
+export default MainLayout

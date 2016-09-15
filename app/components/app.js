@@ -4,7 +4,7 @@ import React, { Component } from 'react'
 import { Router, browserHistory, Route } from 'react-router'
 
 // Store
-import GlobalStore from './store/global_store'
+import Site from './store/site'
 
 // Layouts
 import MainLayout from './mainLayout'
@@ -15,12 +15,22 @@ import Tutorial from './tutorial'
 import AboutMe from './aboutMe'
 import Messages from './messages'
 
-var globalStore = new GlobalStore()
+let site = new Site()
 
-export default class App extends Component {
+/* So ZeroFrame can update the information in the store */
+ZeroFrame.route = (cmd, message) => {
+  site.info = message.params
+}
+
+class App extends Component {
+  static childContextTypes = {
+    store: React.PropTypes.object
+  }
   getChildContext () {
     return {
-      globalStore: globalStore
+      store: {
+        site: site
+      }
     }
   }
 
@@ -39,11 +49,4 @@ export default class App extends Component {
   }
 }
 
-App.childContextTypes = {
-  globalStore: React.PropTypes.object
-}
-
-ZeroFrame.route = function (cmd, message) {
-  let info = message.params
-  globalStore.site = info
-}
+export default App

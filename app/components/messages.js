@@ -1,21 +1,36 @@
 import React, { Component } from 'react'
 import ZeroFrame from 'zeroframe'
+import { resolve } from 'react-resolver'
 import { observer } from 'mobx-react'
 
+@resolve('messages', () => {
+  const cmd = 'dbQuery'
+  const query = 'SELECT * FROM message ORDER BY date_added'
+
+  let promise = new Promise((resolve, reject) => {
+    ZeroFrame.cmd(cmd, [query], (data) => {
+      if (data.length >= 0) {
+        resolve(data)
+      } else {
+        reject(Error('Cannot get messages'))
+      }
+    })
+  })
+  return promise
+})
 @observer
-export default class Messages extends Component {
+class Messages extends Component {
+  static contextTypes = {
+    store: React.PropTypes.object.isRequired
+  }
+
   constructor (props) {
     super(props)
 
     this.handleTextChange = this.handleTextChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
-    this.state = {}
-  }
 
-  componentWillMount () {
-    ZeroFrame.cmd('dbQuery', ['SELECT * FROM message ORDER BY date_added'], (data) => {
-      this.context.globalStore.messages = data
-    })
+    this.state = {}
   }
 
   handleClick () {
@@ -28,7 +43,7 @@ export default class Messages extends Component {
 
   handleSubmit (e) {
     e.preventDefault()
-    let innerPath = 'data/users/' + this.context.globalStore.site.auth_address + '/data.json'
+    let innerPath = 'data/users/' + this.context.store.site.info.auth_address + '/data.json'
     ZeroFrame.cmd('fileGet', {'inner_path': innerPath, 'required': false}, (data) => {
       if (data) {
         data = JSON.parse(data)
@@ -45,9 +60,6 @@ export default class Messages extends Component {
           ZeroFrame.cmd('sitePublish', {'inner_path': innerPath}, (res) => {
             console.log(res)
           })
-          ZeroFrame.cmd('dbQuery', ['SELECT * FROM message ORDER BY date_added'], (data) => {
-            this.context.globalStore.messages = data
-          })
         } else {
           ZeroFrame.cmd('wrapperNotification', ['error', 'File write error:' + res])
         }
@@ -60,9 +72,9 @@ export default class Messages extends Component {
       <article>
         <h1>Leave a message</h1>
         <p>Tell me what you think of it!</p>
-        {this.context.globalStore.site.cert_user_id &&
+        {this.context.store.site.info.cert_user_id &&
           <form onSubmit={this.handleSubmit}>
-            <h4>Glad to meet you {this.context.globalStore.site.cert_user_id}</h4>
+            <h4>Glad to meet you {this.context.store.site.info.cert_user_id}</h4>
             <fieldset className="form-group">
               <label htmlFor="message">Your message</label>
               <textarea
@@ -75,7 +87,7 @@ export default class Messages extends Component {
             </fieldset>
             <button type="submit" className="btn btn-primary">Submit</button>
           </form>}
-        {!this.context.globalStore.site.cert_user_id &&
+        {!this.context.store.site.info.cert_user_id &&
           <div>
             <p>Too bad you need to be authorized to post a message</p>
             <button className="btn btn-primary" onClick={this.handleClick}>Select User</button>
@@ -83,7 +95,7 @@ export default class Messages extends Component {
         }
 
         <ul>
-          {this.context.globalStore.messages.map((message) => {
+          {this.props.messages.map((message) => {
             return (<li>{message.body}</li>)
           })}
         </ul>
@@ -92,6 +104,4 @@ export default class Messages extends Component {
   }
 }
 
-Messages.contextTypes = {
-  globalStore: React.PropTypes.object.isRequired
-}
+export default Messages
